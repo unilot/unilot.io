@@ -1,6 +1,7 @@
-certifi==2017.4.17
+certifi==2017.7.27.1
 chardet==3.0.4
-Django==1.11.3
+coinbase==2.0.6
+Django==1.11.4
 django-filter==1.0.4
 django-oauth-toolkit==1.0.0
 django-telegrambot==1.0.1
@@ -16,9 +17,10 @@ Markdown==2.6.8
 oauthlib==2.0.2
 pkg-resources==0.0.0
 psycopg2==2.7.1
+pycrypto==2.6.1
 pylru==1.0.9
 pysha3==1.0.2
-python-telegram-bot==7.0.0
+python-telegram-bot==8.0
 pytz==2017.2
 requests==2.18.1
 rlp==0.5.1
