@@ -108,3 +108,20 @@ class Device(models.Model):
 
     class Meta:
         unique_together = (('os', 'token'))
+
+class ExchangeRate(models.Model):
+    C_CURRENCY_ETH = 10
+    C_CURRENCY_BTC = 20
+
+    CURRENCY_USD = 30
+
+    CURRENCY_LIST = (
+        (C_CURRENCY_ETH, _('ETH')),
+        (C_CURRENCY_BTC, _('BTC')),
+        (CURRENCY_USD, _('USD'))
+    )
+
+    base_currency = models.IntegerField(null = False, choices=CURRENCY_LIST)
+    currency = models.IntegerField(null=False, choices=CURRENCY_LIST)
+    rate = models.FloatField(null=False)
+    created_at = models.DateTimeField(auto_now_add=True)
