@@ -1,9 +1,7 @@
-from pprint import pprint
-
 from django.core.management.base import BaseCommand, CommandError
 from django.utils import timezone
 
-from backend.models import Game,Ticket,UserWallet
+from backend.models import Game
 from django.contrib.auth.models import User
 from django.utils.timezone import now
 
