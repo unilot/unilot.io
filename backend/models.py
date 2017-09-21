@@ -27,7 +27,7 @@ class Game(models.Model):
     TYPE_LIST = (
         (TYPE_1_DAY, _('1 day')),
         (TYPE_7_DAYS, _('7 days')),
-        (TYPE_7_DAYS, _('30 days')),
+        (TYPE_30_DAYS, _('30 days')),
     )
 
     TYPE_BET_MAP = {
