@@ -7,5 +7,5 @@ from backend.serializers.game import PublicGameSerializer
 class GameViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [TokenHasScope]
     required_scopes = ['read']
-    queryset = Game.objects.all()
+    queryset = Game.filter_active().all()
     serializer_class = PublicGameSerializer

@@ -1,9 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 from django.utils.translation import ugettext as _
 from web3.contract import Contract
 
-from ethereum.utils.web3 import AppWeb3, ContractHelper, AccountHelper
+from ethereum.utils.web3 import AppWeb3, ContractHelper, AccountHelper, get_config
 
 
 class Game(models.Model):
@@ -14,6 +15,7 @@ class Game(models.Model):
 
     TYPE_1_DAY = 10
     TYPE_7_DAYS = 30
+    TYPE_30_DAYS = 50
 
     STATUS_LIST = (
         (STATUS_NEW, _('New')),
@@ -25,6 +27,7 @@ class Game(models.Model):
     TYPE_LIST = (
         (TYPE_1_DAY, _('1 day')),
         (TYPE_7_DAYS, _('7 days')),
+        (TYPE_30_DAYS, _('30 days')),
     )
 
     TYPE_BET_MAP = {
@@ -32,12 +35,14 @@ class Game(models.Model):
         TYPE_7_DAYS: 0.05,
     }
 
-    CONTRACT_NAME='Lottery'
+    CONTRACT_NAME='UnilotEther'
 
     type = models.IntegerField(choices=TYPE_LIST, null=False)
-    status = models.IntegerField(choices=STATUS_LIST, null=False)
+    status = models.IntegerField(choices=STATUS_LIST, null=False, default=STATUS_NEW)
     smart_contract_id = models.CharField(max_length=42, null=False)
     transaction_id = models.CharField(max_length=66, null=False)
+    prize_amount = models.FloatField(null=True, default=0)
+    num_players = models.IntegerField(null=True, default=0)
     user = models.ForeignKey(User, null=True, on_delete=models.deletion.PROTECT, related_name='game')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -48,11 +53,15 @@ class Game(models.Model):
 
     def get_web3(self):
         if not self.__web3__:
-            self.__web3__ = AppWeb3.get_web3();
+            self.__web3__ = AppWeb3.get_web3()
 
         return self.__web3__
 
     def get_smart_contract(self):
+        """
+        :rtype: Contract
+        """
+
         web3 = self.get_web3()
         contract = web3.eth.contract(contract_name=self.CONTRACT_NAME,
                                      abi=ContractHelper.get_abi(self.CONTRACT_NAME),
@@ -72,19 +81,41 @@ class Game(models.Model):
 
         AccountHelper.unlock_base_account()
 
-        self.transaction_id = contract.deploy(transaction={"from": web3.eth.coinbase},
-                                              args=[web3.toWei(self.TYPE_BET_MAP[self.type], 'ether')])
-        self.smart_contract_id = contract.address
+        def get_contract_address(event_log):
+            """
+            :param event_log:
+            :type dict:
+            :return:
+            """
+
+            self.smart_contract_id = event_log['address']
+            self.status = self.STATUS_PUBLISHED
+            self.save()
+
+        transfer_filter = contract.on('GameStarted')
+        transfer_filter.watch(get_contract_address)
+
+        # TODO move prices to config
+        self.transaction_id = contract.deploy(transaction={'from': AccountHelper.get_base_account(), "gasPrice": web3.toWei(25, 'gwei')},
+                                              args=[web3.toWei(0.05, 'ether')])
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
 
-
-        if not self.transaction_id:
+        if not self.transaction_id or self.transaction_id == '0':
             self.build_contract()
 
         super(Game, self).save(force_insert=force_insert, force_update=force_update, using=using,
                                update_fields=update_fields)
+
+    @classmethod
+    def filter_active(self):
+        return self.objects\
+        .filter( started_at__lte=timezone.now(), ending_at__gt=timezone.now(), status=Game.STATUS_PUBLISHED )\
+        .exclude(smart_contract_id__in=('', '0'))
+
+    def __str__(self):
+        return '%d - %s' % (self.id, ( self.smart_contract_id if self.smart_contract_id else '%s in progress' % self.transaction_id ) )
 
 
 class UserTelegram(models.Model):
