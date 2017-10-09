@@ -961,9 +961,15 @@ input:-moz-placeholder { text-overflow: ellipsis; }
 }
 	
 .socials-icons li {
-	margin: 0;
 	display: block;
 	float: left;
+	border: 2px #FFF solid;
+	border-radius: 100%;
+	margin: 2px;
+}
+
+.socials-icons li:hover {
+	background-color: #FFF;
 }
 
 .socials-icons li a {
