@@ -1,0 +1,105 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load i18n %}
+{% block title %}{% trans 'Team' %}{% endblock %}
+{% block content %}
+<div class="container-section">
+    <div class="container-table">
+        <div class="content-table">
+            <!-- bt-carousel -->
+            <div class="bt-carousel">
+
+                <!-- services section -->
+                <div class="item-slide show">
+                    <!-- container -->
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-10 col-md-offset-1">
+
+                                <!-- header section -->
+                                <div class="header-section animated bounceInDown" data-animation-delay="700">
+                                    <!-- title section -->
+                                    <h2 class="title-section">{% trans 'Our Team' %}</h2><!-- /title section -->
+                                    <div class="line-separate line-white line-center"><span></span></div>
+                                </div>
+                                <!-- /header section -->
+
+                                <!-- content slide -->
+                                <div class="content-slide">
+                                    <div class="row animated bounceInUp team" data-animation-delay="700">
+                                        <!-- Team -->
+                                        <div class="col-md-3 col-sm-6 team-member">
+                                            <div class="panel">
+                                                <img src="{% static 'images/founder.jpg' %}"
+                                                     data-at2x="{% static 'images/founder@2x.jpg' %}"
+                                                     alt="Unilot {% trans 'FOUNDER' %} {% trans 'Ilya Sohn' %}"
+                                                     class="img-circle img-responsive">
+                                                <h4>{% trans 'Ilya Sohn' %}</h4>
+                                                <h6>{% trans 'FOUNDER' %}</h6>
+                                                <a href="#"><i class="fa fa-facebook"></i></a>
+                                                <a href="#"><i class="fa fa-twitter"></i></a>
+                                                <a href="#"><i class="fa fa-pinterest-p"></i></a>
+                                                <a href="#"><i class="fa fa-google-plus"></i></a>
+                                            </div>
+                                        </div><!-- /panel -->
+
+                                        <div class="col-md-3 col-sm-6 team-member">
+                                            <div class="panel">
+                                                <img src="{% static 'images/marketing-manager.jpg' %}"
+                                                     data-at2x="images/marketing-manager@2x.jpg"
+                                                     alt="Unilot {% trans 'MARKETING MANAGER' %} {% trans 'Dar`ya Kadirova' %}"
+                                                     class="img-circle img-responsive">
+                                                <h4>{% trans 'Dar`ya Kadirova' %}</h4>
+                                                <h6>{% trans 'MARKETING MANAGER' %}</h6>
+                                                <a href="#"><i class="fa fa-facebook"></i></a>
+                                                <a href="#"><i class="fa fa-twitter"></i></a>
+                                                <a href="#"><i class="fa fa-pinterest-p"></i></a>
+                                                <a href="#"><i class="fa fa-google-plus"></i></a>
+                                            </div>
+                                        </div><!-- /panel -->
+
+                                        <div class="col-md-3 col-sm-6 team-member">
+                                            <div class="panel">
+                                                <img src="{% static 'images/advisor-1.jpg' %}"
+                                                     data-at2x="images/advisor-1@2x.jpg"
+                                                     alt="Unilot {% trans 'STRATEGIC PRODUCT DEVELOPMENT ADVISOR' %} {% trans 'Sergey Skabelkin' %}"
+                                                     class="img-circle img-responsive">
+                                                <h4>{% trans 'Sergey Skabelkin' %}</h4>
+                                                <h6>{% trans 'STRATEGIC PRODUCT DEVELOPMENT ADVISOR' %}</h6>
+                                                <a href="#"><i class="fa fa-facebook"></i></a>
+                                                <a href="#"><i class="fa fa-twitter"></i></a>
+                                                <a href="#"><i class="fa fa-pinterest-p"></i></a>
+                                                <a href="#"><i class="fa fa-google-plus"></i></a>
+                                            </div>
+                                        </div><!-- /panel -->
+
+                                        <div class="col-md-3 col-sm-6 team-member">
+                                            <div class="panel">
+                                                <img src="{% static 'images/advisor-2.jpg' %}"
+                                                     data-at2x="images/advisor-2@2x.jpg"
+                                                     alt="Unilot {% trans 'MOBILE PRODUCT DEVELOPMENT AND PROMOTION ADVISER' %} {% trans 'Bakhram Fayzutdinov' %}"
+                                                     class="img-circle img-responsive">
+                                                <h4>{% trans 'Bakhram Fayzutdinov' %}</h4>
+                                                <h6>{% trans 'MOBILE PRODUCT DEVELOPMENT AND PROMOTION ADVISER' %}</h6>
+                                                <a href="#"><i class="fa fa-facebook"></i></a>
+                                                <a href="#"><i class="fa fa-twitter"></i></a>
+                                                <a href="#"><i class="fa fa-pinterest-p"></i></a>
+                                                <a href="#"><i class="fa fa-google-plus"></i></a>
+                                            </div>
+                                        </div><!-- /panel -->
+
+                                        <!-- /Team -->
+                                    </div><!-- /row -->
+
+                                </div><!-- /content slide -->
+                            </div>
+                        </div><!-- /row -->
+                    </div><!-- /container -->
+                </div>
+                <!-- /Team section -->
+
+            </div><!-- /bt-carousel -->
+        </div>
+    </div>
+</div>
+{% endblock %}
