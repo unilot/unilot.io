@@ -56,7 +56,7 @@ msgid ""
 "Our website is under construction. We`ll be here soon with our new awesome "
 "site, subscribe to be notified."
 msgstr ""
-"Наш сайт в настоящий момент находится в разработке, но вы можете подписаться"
+"Наш сайт в настоящий момент находится в разработке, но вы можете подписаться "
 "чтобы получить уведомление когда сайт начнёт свою работу."
 
 #: frontend/templates/index.html:39
