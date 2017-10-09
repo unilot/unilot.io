@@ -19,39 +19,31 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
-#: frontend/templates/about.html:20 frontend/templates/base/base.html:87
+
 msgid "About Us"
 msgstr "О нас"
 
-#: frontend/templates/about.html:42
 msgid "Our presentation"
 msgstr "Наша презентация"
 
-#: frontend/templates/base/base.html:83
 msgid "Menu"
 msgstr "Меню"
 
-#: frontend/templates/base/base.html:86
 msgid "Home"
 msgstr "Главная"
 
-#: frontend/templates/base/base.html:88
 msgid "Team"
-msgstr "Комманда"
+msgstr "Команда"
 
-#: frontend/templates/base/base.html:89
 msgid "Our product"
 msgstr "Наш продукт"
 
-#: frontend/templates/base/base.html:90
 msgid "Contact"
 msgstr ""
 
-#: frontend/templates/base/base.html:120
 msgid "All Rights Reserved"
 msgstr "Все права защищены"
 
-#: frontend/templates/index.html:26
 msgid ""
 "Our website is under construction. We`ll be here soon with our new awesome "
 "site, subscribe to be notified."
@@ -59,46 +51,89 @@ msgstr ""
 "Наш сайт в настоящий момент находится в разработке, но вы можете подписаться "
 "чтобы получить уведомление когда сайт начнёт свою работу."
 
-#: frontend/templates/index.html:39
 msgid "Enter Your Email Address"
 msgstr "Укажите свой e-mail"
 
-#: frontend/templates/index.html:41
 msgid "Subscribe"
 msgstr "Подписаться"
 
-#: frontend/templates/team.html:21
-msgid "Our Team"
-msgstr "Наша комманда"
+msgid "Project Advisors"
+msgstr "Эдвайзеры проекта"
 
-#: frontend/templates/team.html:34 frontend/templates/team.html:37
-msgid "FOUNDER"
-msgstr "ОСНОВАТЕЛЬ"
+msgid "LEGAL ISSUES ADVISER"
+msgstr "ADVISOR ПО ЮРЕДИЧЕСКИМ ВОПРОСАМ"
 
-#: frontend/templates/team.html:34 frontend/templates/team.html:36
-msgid "Ilya Sohn"
-msgstr "Илья Сон"
+msgid "Petr Avakyan"
+msgstr "Петр Авакян"
 
-#: frontend/templates/team.html:49 frontend/templates/team.html:52
-msgid "MARKETING MANAGER"
-msgstr "МЕНЕДЖЕР ПО МАРКЕТИНГУ"
+msgid "INTERNATIONAL RELATION AND BUSINESS ANALYTICS ADVISOR"
+msgstr "ADVISOR ПО МЕЖДУНАРОДНЫМ ОТНОШЕНИЯМ И БИЗНЕС АНАЛИТИКЕ"
 
-#: frontend/templates/team.html:49 frontend/templates/team.html:51
-msgid "Dar`ya Kadirova"
-msgstr "Дарья Кадырова"
+msgid "Timur Mukminov"
+msgstr "Тимур Мукминов"
 
-#: frontend/templates/team.html:64 frontend/templates/team.html:67
 msgid "STRATEGIC PRODUCT DEVELOPMENT ADVISOR"
-msgstr "АДВАЙЗЕР ПО СТРАТЕГИИ РАЗРАБОТКИ ПРОДУКТА"
+msgstr "ADVISOR ПО СТРАТЕГИИ РАЗРАБОТКИ ПРОДУКТА"
 
-#: frontend/templates/team.html:64 frontend/templates/team.html:66
 msgid "Sergey Skabelkin"
 msgstr "Сергей Скабелкин"
 
-#: frontend/templates/team.html:79 frontend/templates/team.html:82
-msgid "MOBILE PRODUCT DEVELOPMENT AND PROMOTION ADVISER"
-msgstr "АДВАЙЗЕР ПО МОБИЛЬНОЙ РАЗРАБОТКЕ И ПРОДВИЖЕНИЮ"
+msgid "BLOCKCHAIN TECHNOLOGY ADVISOR"
+msgstr "ADVISOR ПО ВНЕДРЕНИЮ И ИСПОЛЬЗОВАНИЮ БЛОКЧЕЙН"
 
-#: frontend/templates/team.html:79 frontend/templates/team.html:81
+msgid "Azamat Kurbanov"
+msgstr "Азамат Курбанов"
+
+msgid "MOBILE PRODUCT DEVELOPMENT AND PROMOTION ADVISER"
+msgstr "ADVISOR ПО МОБИЛЬНОЙ РАЗРАБОТКЕ И ПРОДВИЖЕНИЮ"
+
 msgid "Bakhram Fayzutdinov"
 msgstr "Бахрам Файзутдинов"
+
+msgid "FOUNDER"
+msgstr "ОСНОВАТЕЛЬ"
+
+msgid "Ilya Sohn"
+msgstr "Илья Сон"
+
+msgid "SMART CONTRACTS DEVELOPER"
+msgstr "РАЗРАБОТЧИК СМАРТ-КОНТРАКТОВ"
+
+msgid "Lushnikov Alexander"
+msgstr "Лушников Александр"
+
+msgid "SENIOR ANDROID DEVELOPER"
+msgstr "ВЕДУЩИЙ РАЗРАБОТЧИК МОБИЛЬНЫХ ПРИЛОЖЕНИЙ НА ПЛАТФОРМЕ АНДРОИД"
+
+msgid "Arseniy Aganov"
+msgstr "Арсений Аганов"
+
+msgid "UI/UX DESIGNER"
+msgstr "UI/UX ДИЗАЙНЕР"
+
+msgid "Shovkat Kukanbayev"
+msgstr "Шовкат Куканбаев"
+
+msgid "MARKETING MANAGER"
+msgstr "МЕНЕДЖЕР ПО МАРКЕТИНГУ"
+
+msgid "Dar`ya Kadirova"
+msgstr "Дарья Кадырова"
+
+msgid "BACKEND DEVELOPER"
+msgstr "BACKEND РАЗРАБОТЧИК"
+
+msgid "Azat Khuziyahmetov"
+msgstr "Азат Хузияхметов"
+
+msgid "SENIOR IOS DEVELOPER"
+msgstr "ВЕДУЩИЙ РАЗРАБОТЧИК МОБИЛЬНЫХ ПРИЛОЖЕНИЙ НА ПЛАТФОРМЕ IOS"
+
+msgid "Bakhodir Ashirmatov"
+msgstr "Баходир Аширматов"
+
+msgid "PR"
+msgstr "PR"
+
+msgid "Daniil Khalupskiy"
+msgstr "Даниил Халупский"
