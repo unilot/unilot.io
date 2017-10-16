@@ -155,3 +155,9 @@ crashlytics-build.properties
 fabric.properties
 
 sportloto/settings.py
+
+tmp/
+frontend/assets/images/advisor-*.jpg
+frontend/assets/images/team-*.jpg
+
+sportloto/static/

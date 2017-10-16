@@ -15,10 +15,16 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.conf.urls.i18n import i18n_patterns
+
 
 urlpatterns = [
     url(r'^api/v1/', include('backend.urls', namespace='backend_v1')),
     url(r'^admin/', admin.site.urls),
     url(r'^o2/', include('oauth2_provider.urls', namespace='oauth2_provider')),
-    url(r'^', include('django_telegrambot.urls'))
+    url(r'^', include('django_telegrambot.urls')),
 ]
+
+urlpatterns += i18n_patterns(
+    url(r'^', include('frontend.urls', namespace='frontend'))
+)

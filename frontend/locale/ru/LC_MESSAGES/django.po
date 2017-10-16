@@ -1,0 +1,139 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-10-09 05:28+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
+"%100>=11 && n%100<=14)? 2 : 3);\n"
+
+msgid "About Us"
+msgstr "О нас"
+
+msgid "Our presentation"
+msgstr "Наша презентация"
+
+msgid "Menu"
+msgstr "Меню"
+
+msgid "Home"
+msgstr "Главная"
+
+msgid "Team"
+msgstr "Команда"
+
+msgid "Our product"
+msgstr "Наш продукт"
+
+msgid "Contact"
+msgstr ""
+
+msgid "All Rights Reserved"
+msgstr "Все права защищены"
+
+msgid ""
+"Our website is under construction. We`ll be here soon with our new awesome "
+"site, subscribe to be notified."
+msgstr ""
+"Наш сайт в настоящий момент находится в разработке, но вы можете подписаться "
+"чтобы получить уведомление когда сайт начнёт свою работу."
+
+msgid "Enter Your Email Address"
+msgstr "Укажите свой e-mail"
+
+msgid "Subscribe"
+msgstr "Подписаться"
+
+msgid "Project Advisors"
+msgstr "Эдвайзеры проекта"
+
+msgid "LEGAL ISSUES ADVISER"
+msgstr "ADVISOR ПО ЮРЕДИЧЕСКИМ ВОПРОСАМ"
+
+msgid "Petr Avakyan"
+msgstr "Петр Авакян"
+
+msgid "INTERNATIONAL RELATION AND BUSINESS ANALYTICS ADVISOR"
+msgstr "ADVISOR ПО МЕЖДУНАРОДНЫМ ОТНОШЕНИЯМ И БИЗНЕС АНАЛИТИКЕ"
+
+msgid "Timur Mukminov"
+msgstr "Тимур Мукминов"
+
+msgid "STRATEGIC PRODUCT DEVELOPMENT ADVISOR"
+msgstr "ADVISOR ПО СТРАТЕГИИ РАЗРАБОТКИ ПРОДУКТА"
+
+msgid "Sergey Skabelkin"
+msgstr "Сергей Скабелкин"
+
+msgid "BLOCKCHAIN TECHNOLOGY ADVISOR"
+msgstr "ADVISOR ПО ВНЕДРЕНИЮ И ИСПОЛЬЗОВАНИЮ БЛОКЧЕЙН"
+
+msgid "Azamat Kurbanov"
+msgstr "Азамат Курбанов"
+
+msgid "MOBILE PRODUCT DEVELOPMENT AND PROMOTION ADVISER"
+msgstr "ADVISOR ПО МОБИЛЬНОЙ РАЗРАБОТКЕ И ПРОДВИЖЕНИЮ"
+
+msgid "Bakhram Fayzutdinov"
+msgstr "Бахрам Файзутдинов"
+
+msgid "FOUNDER"
+msgstr "ОСНОВАТЕЛЬ"
+
+msgid "Ilya Sohn"
+msgstr "Илья Сон"
+
+msgid "SMART CONTRACTS DEVELOPER"
+msgstr "РАЗРАБОТЧИК СМАРТ-КОНТРАКТОВ"
+
+msgid "Lushnikov Alexander"
+msgstr "Лушников Александр"
+
+msgid "SENIOR ANDROID DEVELOPER"
+msgstr "ВЕДУЩИЙ РАЗРАБОТЧИК МОБИЛЬНЫХ ПРИЛОЖЕНИЙ НА ПЛАТФОРМЕ АНДРОИД"
+
+msgid "Arseniy Aganov"
+msgstr "Арсений Аганов"
+
+msgid "UI/UX DESIGNER"
+msgstr "UI/UX ДИЗАЙНЕР"
+
+msgid "Shovkat Kukanbayev"
+msgstr "Шовкат Куканбаев"
+
+msgid "MARKETING MANAGER"
+msgstr "МЕНЕДЖЕР ПО МАРКЕТИНГУ"
+
+msgid "Dar`ya Kadirova"
+msgstr "Дарья Кадырова"
+
+msgid "BACKEND DEVELOPER"
+msgstr "BACKEND РАЗРАБОТЧИК"
+
+msgid "Azat Khuziyahmetov"
+msgstr "Азат Хузияхметов"
+
+msgid "SENIOR IOS DEVELOPER"
+msgstr "ВЕДУЩИЙ РАЗРАБОТЧИК МОБИЛЬНЫХ ПРИЛОЖЕНИЙ НА ПЛАТФОРМЕ IOS"
+
+msgid "Bakhodir Ashirmatov"
+msgstr "Баходир Аширматов"
+
+msgid "PR"
+msgstr "PR"
+
+msgid "Daniil Khalupskiy"
+msgstr "Даниил Халупский"
