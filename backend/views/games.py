@@ -7,13 +7,13 @@ from backend.models import Game
 from backend.serializers.game import PublicGameSerializer, GameWinner
 
 
-class GameViewSet(generics.ListAPIView):
+class GamesView(generics.ListAPIView):
     permission_classes = [TokenHasScope]
     required_scopes = ['read']
     queryset = Game.filter_active()
     serializer_class = PublicGameSerializer
 
-class GamePrizesViewSet(generics.RetrieveAPIView):
+class GamePrizesView(generics.RetrieveAPIView):
     permission_classes = [TokenHasScope]
     required_scopes = ['read']
     queryset = Game.filter_active()
