@@ -1,12 +1,8 @@
-from django.conf.urls import url, include
-from rest_framework import routers
+from django.conf.urls import url
 from backend.views import games, devices
 
-router = routers.DefaultRouter()
-
-router.register(r'^games', games.GameViewSet, base_name='games')
-router.register(r'^device', devices.DeviceCreateViewSet, base_name='devices   ')
-
 urlpatterns = [
-    url(r'^', include(router.urls))
+    url(r'^games(|/)$', games.GamesView.as_view(), name='games'),
+    url(r'^games/(?P<pk>\d+)/winners(|/)$', games.GamePrizesView.as_view(), name='games'),
+    url(r'^device(|/)$', devices.DeviceCreateViewSet, name='device')
 ]
