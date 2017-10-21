@@ -16,7 +16,7 @@ class GamesView(generics.ListAPIView):
 class GamePrizesView(generics.RetrieveAPIView):
     permission_classes = [TokenHasScope]
     required_scopes = ['read']
-    queryset = Game.filter_active()
+    queryset = Game
     serializer_class = GameWinner
 
     def retrieve(self, request, *args, **kwargs):
