@@ -122,23 +122,6 @@ class UserTelegram(models.Model):
     user = models.ForeignKey(User, on_delete=models.deletion.PROTECT, related_name='telegram')
     id = models.IntegerField(primary_key=True)
 
-class Device(models.Model):
-    OS_IOS = 10
-    OS_ANDROID = 20
-
-    OS_LIST = (
-        (OS_IOS, _('IOS')),
-        (OS_ANDROID, _('Android OS'))
-    )
-
-    os = models.IntegerField(choices=OS_LIST, null=False)
-    token = models.CharField(max_length=1024)
-    fail_count = models.IntegerField(default=0)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        unique_together = (('os', 'token'))
 
 class ExchangeRate(models.Model):
     C_CURRENCY_ETH = 10
