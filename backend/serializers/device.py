@@ -1,3 +1,5 @@
+from pprint import pprint
+
 from push_notifications.models import APNSDevice, GCMDevice
 from rest_framework import serializers
 from django.utils.translation import ugettext as _
@@ -23,7 +25,7 @@ class DummyDeviceObject(object):
 
 class CreateDeviceSerializer(serializers.Serializer):
 
-    os    = serializers.IntegerField()
+    os    = serializers.ChoiceField(choices=DeviceOS.CHOICES)
     token = serializers.CharField()
 
     def create(self, validated_data):
@@ -44,3 +46,34 @@ class CreateDeviceSerializer(serializers.Serializer):
         instance = DummyDeviceObject(**device_data)
 
         return instance
+
+class DebugPush(serializers.Serializer):
+    os = serializers.ChoiceField(choices=DeviceOS.CHOICES)
+    token = serializers.CharField(required=True)
+    message = serializers.CharField(required=True)
+    extra = serializers.DictField(required=False)
+
+    def save(self, **kwargs):
+        device_data = {}
+
+        if self.validated_data['os'] == DeviceOS.IOS:
+            device_class = APNSDevice
+        else:
+            device_data['cloud_message_type'] = 'FCM'
+            device_class = GCMDevice
+
+        device_data['registration_id'] = self.validated_data['token']
+
+        device, created = device_class.objects.get_or_create(**device_data)
+
+        """
+        {'canonical_ids': 0,
+         'failure': 1,
+         'multicast_id': 6123991683170184548,
+         'results': [{'error': 'InvalidRegistration'}],
+         'success': 0}
+        """
+        result = device.send_message(message=self.validated_data['message'], extra=self.validated_data.get('extra', {}))
+
+        if result.get('success') == 0:
+            raise Exception(result.get('results'))
