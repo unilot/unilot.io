@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'push_notifications',
     'django_telegrambot',
     'oauth2_provider',
     'rest_framework',
@@ -160,6 +161,12 @@ COINBASE_CONFIG = {
     'API_KEY': 'AAAAAAABBBBB',
     'API_SECRET': 'CCCCCCCCCCCCCCDDDDDDDDDDDDDDDFFFFFFFFFFF',
     'API_VERSION': '2017-09-12'
+}
+
+PUSH_NOTIFICATIONS_SETTINGS = {
+        "FCM_API_KEY": "[your api key]",
+        "APNS_CERTIFICATE": "/path/to/your/certificate.pem",
+        "APNS_TOPIC": "com.example.push_test",
 }
 
 WSGI_APPLICATION = 'sportloto.wsgi.application'
