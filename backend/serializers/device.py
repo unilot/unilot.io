@@ -37,10 +37,10 @@ class CreateDeviceSerializer(serializers.Serializer):
             raise AttributeError(('Invalid value "%s" of os field') % (validated_data.get('os')))
 
         if validated_data.get('os') == 10:
-            APNSDevice.objects.create(**device_data)
+            APNSDevice.objects.get_or_create(**device_data)
         else:
             device_data['cloud_message_type'] = 'FCM'
-            GCMDevice.objects.create(**device_data)
+            GCMDevice.objects.get_or_create(**device_data)
 
         # Pretty dirty hack to keep back compatibility
         instance = DummyDeviceObject(**device_data)
