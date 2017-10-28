@@ -13,6 +13,14 @@ class GamesView(generics.ListAPIView):
     queryset = Game.filter_active()
     serializer_class = PublicGameSerializer
 
+
+class SingleGameView(generics.RetrieveAPIView):
+    permission_classes = [TokenHasScope]
+    required_scopes = ['read']
+    queryset = Game
+    serializer_class = PublicGameSerializer
+
+
 class GamePrizesView(generics.RetrieveAPIView):
     permission_classes = [TokenHasScope]
     required_scopes = ['read']
