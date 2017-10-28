@@ -41,3 +41,9 @@ class GamePrizesView(generics.RetrieveAPIView):
         serializer = GameWinner(prize_data, many=True)
 
         return Response(serializer.data)
+
+class GameArchivedView(generics.ListAPIView):
+    permission_classes = [TokenHasScope]
+    required_scopes = ['read']
+    queryset = Game.filter_archived()
+    serializer_class = PublicGameSerializer

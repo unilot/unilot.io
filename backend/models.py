@@ -109,10 +109,16 @@ class Game(models.Model):
                                update_fields=update_fields)
 
     @classmethod
-    def filter_active(self):
-        return self.objects\
+    def filter_active(cls):
+        return cls.objects\
         .filter( started_at__lte=timezone.now(), ending_at__gt=timezone.now(), status=Game.STATUS_PUBLISHED )\
         .exclude(smart_contract_id__in=('', '0'))
+
+    @classmethod
+    def filter_archived(cls):
+        return cls.objects\
+        .filter( ending_at__lte=timezone.now() )\
+        .exclude(smart_contract_id__in=('', '0'), status__in=(Game.STATUS_PUBLISHED, Game.STATUS_NEW))
 
     def __str__(self):
         return '%d - %s' % (self.id, ( self.smart_contract_id if self.smart_contract_id else '%s in progress' % self.transaction_id ) )
