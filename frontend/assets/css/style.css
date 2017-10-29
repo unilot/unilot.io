@@ -63,7 +63,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 
 
 body {
-	color: #fff;
+	color: #000;
 	background: #ffffff;
 	line-height: 1;
 	font-size: 16px;
@@ -179,6 +179,10 @@ strong {
 	color: #fff;
 }
 
+.color-black {
+	color: #000;
+}
+
 /* ==================== 5.0 PRELOADER ==================== */
 
 
@@ -260,8 +264,8 @@ strong {
 /* ==================== 7.1 IMAGE BACKGROUND ==================== */
 
 .image-background {
-	background-image: url("../images/image-bg.jpg");
-	background-size: cover;
+	background-image: url("../images/image-bg.png");
+	background-size: contain;
 }
 
 /* ==================== 8.0 HEADER ==================== */
@@ -277,6 +281,7 @@ strong {
 .logo-site img {
 	display: block;
 	margin: 0 auto;
+	width: 300px;
 }
 
 .title-section {
@@ -287,7 +292,7 @@ strong {
 	-webkit-backface-visibility: hidden;
 	   -moz-backface-visibility: hidden;
         -ms-backface-visibility: hidden;
-    color: #fff;
+    color: #000;
     font-weight: 300;
 	position: relative;
 }
@@ -353,7 +358,7 @@ strong {
 }
 
 .content-slide {
-	color: #fff;
+	color: #000;
 }
 .item-slide {
 	margin-top:20px;
@@ -385,7 +390,7 @@ strong {
 }
 .category-name {
   float: left;
-  color: #fff;
+  color: #000;
   font-size: 15px;
   text-transform: uppercase;
   letter-spacing: 2px;
@@ -395,7 +400,7 @@ strong {
 
 .progress-status {
   float: right;
-  color: #fff;
+  color: #000;
   font-size: 1em;
 }
 .skill-bar {
@@ -522,7 +527,7 @@ iframe {
 
 .service-icon {
     font-size: 40px;
-    color: #fff;
+    color: #000;
 	float: left;
 	width: 60px;
 	text-align: center;
@@ -615,7 +620,7 @@ border: 0 !important;
 
 
 #clock-countdown {
-	color: #fff;
+	color: #000;
 	overflow: hidden;
 }
 
@@ -733,7 +738,7 @@ input, textarea, select {
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
-	border: 2px solid #fff;
+	border: 2px solid #000;
 }
 
 textarea {
@@ -757,9 +762,9 @@ input[type="submit"], button {
 	width: auto;
 	font-style: normal;
 	background: #fff;
-	color: #333;
+	color: #000;
 	cursor: pointer;
-	border: 1px solid #fff;
+	border: 1px solid #000;
 	padding: 12px 20px;
 }
 
@@ -803,7 +808,7 @@ input:-moz-placeholder { text-overflow: ellipsis; }
 
 .message-success {
 	padding-top: 10px;
-	color: #fff;	
+	color: #000;
 	font-size: 14px;
 	font-weight: 300;
 	display: none;
@@ -811,7 +816,7 @@ input:-moz-placeholder { text-overflow: ellipsis; }
 
 .message-error {
 	padding-top: 10px;
-	color: #fff;	
+	color: #000;
 	font-size: 14px;
 	font-weight: 300;
 	display: none;
@@ -832,8 +837,8 @@ input:-moz-placeholder { text-overflow: ellipsis; }
 	background: transparent;
 	outline: none;
 	-webkit-appearance: none;
-	color: #fff;
-	border: 2px solid #fff;
+	color: #000;
+	border: 2px solid #000;
 	padding: 9px 20px;
 	margin: 0px;
 	font-style: italic;
@@ -868,24 +873,24 @@ input:-moz-placeholder { text-overflow: ellipsis; }
 	margin: 20px 0 30px 0;
 	font-size: 18px;
 	font-weight: 300;
-	color: #fff;
+	color: #000;
 }
 
 /* WebKit browsers */
 .contact-form input::-webkit-input-placeholder,
 .contact-form textarea::-webkit-input-placeholder { 
-    color: #fff;
+    color: #000;
 }
 .contact-form :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-    color: #fff;
+    color: #000;
     opacity:  1;
 }
 .contact-form ::-moz-placeholder { /* Mozilla Firefox 19+ */
-    color: #fff; 
+    color: #000;
     opacity:  1;
 }
 .contact-form :-ms-input-placeholder { /* Internet Explorer 10+ */
-   color: #fff;
+   color: #000;
 }
 
 
@@ -897,7 +902,7 @@ input:-moz-placeholder { text-overflow: ellipsis; }
 .subscription-form input {
 	float: left;
 	display: inline-block;
-	border: none;
+	border: 2px solid #000
 }
 
 .subscription-form input[type="email"] {
@@ -963,13 +968,14 @@ input:-moz-placeholder { text-overflow: ellipsis; }
 .socials-icons li {
 	display: block;
 	float: left;
-	border: 2px #FFF solid;
+	border: 2px #000 solid;
 	border-radius: 100%;
 	margin: 2px;
 }
 
 .socials-icons li:hover {
-	background-color: #FFF;
+	background-color: #000;
+	opacity: 0.8;
 }
 
 .socials-icons li a {
@@ -980,13 +986,13 @@ input:-moz-placeholder { text-overflow: ellipsis; }
 }
 
 .socials-icons li a i {
-	color: #fff;
+	color: #000;
 	line-height: 70px;
 	font-size: 21px;
 }
 
 .socials-icons li a:hover i {
-	color: #999;
+	color: #FFF;
 }
 
 /* ==================== 15.0 BUTTONS ==================== */
@@ -1044,7 +1050,7 @@ input:-moz-placeholder { text-overflow: ellipsis; }
 	-moz-border-radius: 5px;
 	border-radius: 5px;
 	padding: 9px 50px;
-	color: #fff;
+	color: #000;
 	line-height: 22px;
 	font-size: 16px;
 	outline: none;
@@ -1052,7 +1058,7 @@ input:-moz-placeholder { text-overflow: ellipsis; }
 	font-weight: 400;
 	margin-top: 5px;
 	margin-bottom: 5px;
-	border: 2px solid #fff;
+	border: 2px solid #000;
 	-webkit-transition: all .3s ease-in-out;
 	-moz-transition: all .3s ease-in-out;
 	-ms-transition: all .3s ease-in-out;
@@ -1062,8 +1068,8 @@ input:-moz-placeholder { text-overflow: ellipsis; }
 
 .border-button:hover,
 .border-button:focus {
-	background: #fff;
-	color: #333;
+	background: #000;
+	color: #FFF;
 	opacity: 0.8;
 }
 
@@ -1076,45 +1082,20 @@ input:-moz-placeholder { text-overflow: ellipsis; }
 /* Transparent */
 .bt-transparent {
 	background: transparent;
-	color: #fff;
+	color: #000;
 }
 
 .bt-transparent:hover,
 .bt-transparent:focus {
-	color: #fff;
+	color: #000;
 	opacity: 0.8;
 }
 
 .bt-transparent i,
 .bt-transparent:hover i,
 .bt-transparent:focus i {
-	color: #fff;
+	color: #000;
 }
-
-/* ==================== 16.0 OVERLAY STYLES ==================== */
-
-
-
-.section-overlay {
-	position: fixed;
-	width: 100%;
-	height: 100%;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	-webkit-transition: all .3s ease-in-out;
-	-moz-transition: all .3s ease-in-out;
-	-ms-transition: all .3s ease-in-out;
-	-o-transition: all .3s ease-in-out;
-	transition: all .3s ease-in-out;
-}
-
-
-.section-overlay {
-	background: rgba(0, 0, 0, .4) !important;
-}
-
 
 /* ==================== 17.0 BACKGROUND COLOR STYLES ==================== */
 
@@ -1350,7 +1331,7 @@ body.mobile .animated {
 	}
 
 	.socials-icons li a i {
-		color: #fff;
+		color: #000;
 		line-height: 80px;
 		font-size: 21px;
 	}
@@ -1456,7 +1437,7 @@ body.mobile .animated {
 	}
 
 	.socials-icons li a i {
-		color: #fff;
+		color: #000;
 		line-height: 80px;
 		font-size: 21px;
 	}

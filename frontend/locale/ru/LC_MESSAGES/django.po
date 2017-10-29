@@ -51,6 +51,9 @@ msgstr ""
 "Наш сайт в настоящий момент находится в разработке, но вы можете подписаться "
 "чтобы получить уведомление когда сайт начнёт свою работу."
 
+msgid  "If you want to take part in testing, please send us your email"
+msgstr "Если хотите принять участие в тестировании, пожалуйста отправьте нам свою электронную почту"
+
 msgid "Enter Your Email Address"
 msgstr "Укажите свой e-mail"
 
@@ -137,3 +140,12 @@ msgstr "PR"
 
 msgid "Daniil Khalupskiy"
 msgstr "Даниил Халупский"
+
+msgid "With support of"
+msgstr "При поддержке"
+
+msgid "Subscription failed. Email might already exist in database."
+msgstr "Возникла ошибка. Возможно ваш e-mail уже есть в базе."
+
+msgid "In social media"
+msgstr "Мы в социальных сетях"
