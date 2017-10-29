@@ -21,6 +21,7 @@ class Game(models.Model):
     STATUS_LIST = (
         (STATUS_NEW, _('New')),
         (STATUS_PUBLISHED, _('Published (Still can buy a ticket)')),
+        (STATUS_FINISHING, _('Winner choosing in progress')),
         (STATUS_CANCELED, _('Canceled (no winner)')),
         (STATUS_FINISHED, _('Finished (has winner)')),
     )
