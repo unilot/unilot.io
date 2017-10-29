@@ -45,11 +45,8 @@ msgid "All Rights Reserved"
 msgstr "Все права защищены"
 
 msgid ""
-"Our website is under construction. We`ll be here soon with our new awesome "
-"site, subscribe to be notified."
-msgstr ""
-"Наш сайт в настоящий момент находится в разработке, но вы можете подписаться "
-"чтобы получить уведомление когда сайт начнёт свою работу."
+"If you want to take part in testing, please send us your email"
+msgstr "Если хотите принять участие в тестировании, пожалуйста отправьте нам свою электронную почту"
 
 msgid "Enter Your Email Address"
 msgstr "Укажите свой e-mail"
