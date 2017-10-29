@@ -137,3 +137,12 @@ msgstr "PR"
 
 msgid "Daniil Khalupskiy"
 msgstr "Даниил Халупский"
+
+msgid "With support of"
+msgstr "При поддержке"
+
+msgid "Subscription failed. Email might already exist in database."
+msgstr "Возникла ошибка. Возможно ваш e-mail уже есть в базе."
+
+msgid "In social media"
+msgstr "Мы в социальных сетях"

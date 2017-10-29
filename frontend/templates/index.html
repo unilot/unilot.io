@@ -1,5 +1,6 @@
 {% extends 'base/base.html' %}
 {% load i18n %}
+{% load static %}
 
 {% block title %}Home page{% endblock %}
 
@@ -36,10 +37,6 @@
                                                         {% csrf_token %}
 
                                                         {{ form }}
-{#                                                        <input type="email" id="email"#}
-{#                                                               class="border-radius-22 bottom-margin"#}
-{#                                                               name="email"#}
-{#                                                               placeholder="{% trans 'Enter Your Email Address' %}"/>#}
                                                         <button type="submit" id="subscribebtn"
                                                                 class="border-button no-bottom-margin">{% trans 'Subscribe' %}
                                                         </button>
@@ -50,14 +47,26 @@
                                             </div><!-- /container form -->
                                         </div><!-- /Subscribe Form -->
 
+                                        <div class="supporters">
+                                        <h2>{% trans 'With support of' %}:</h2>
+                                        <nav class="animated bounceInUp"
+                                             data-animation-delay="700">
+                                            <ul>
+                                                <li><a href="https://telegraf.money" target="_blank"><img src="{% static 'images/telegraf-money.png' %}" alt="Telegraf Money"></a></li>
+                                                <li><a href="https://debitcoin.io" target="_blank"><img src="{% static 'images/debitcoin.png' %}" alt=""></a></li>
+                                            </ul>
+                                        </nav><!-- /socials icons -->
+                                            </div>
+
                                         <!-- socials icons -->
+                                        <h2>{% trans 'In social media' %}:</h2>
                                         <nav class="socials-icons animated bounceInUp"
                                              data-animation-delay="700">
                                             <ul>
-                                                <li><a href="https://www.facebook.com/unilot.io/"><i class="ion-social-facebook"></i></a></li>
-                                                <li><a href="https://twitter.com/unilot_lottery"><i class="ion-social-twitter"></i></a></li>
-                                                <li><a href="https://www.reddit.com/user/unilot_lottery/"><i class="ion-social-reddit"></i></a></li>
-                                                <li><a href="https://www.linkedin.com/company/18284068/"><i class="ion-social-linkedin"></i></a></li>
+                                                <li><a href="https://www.facebook.com/unilot.io/" target="_blank"><i class="ion-social-facebook"></i></a></li>
+                                                <li><a href="https://twitter.com/unilot_lottery" target="_blank"><i class="ion-social-twitter"></i></a></li>
+                                                <li><a href="https://www.reddit.com/user/unilot_lottery/" target="_blank"><i class="ion-social-reddit"></i></a></li>
+                                                <li><a href="https://www.linkedin.com/company/18284068/" target="_blank"><i class="ion-social-linkedin"></i></a></li>
                                                 </li>
                                             </ul>
                                         </nav><!-- /socials icons -->
