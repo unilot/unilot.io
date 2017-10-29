@@ -281,6 +281,7 @@ strong {
 .logo-site img {
 	display: block;
 	margin: 0 auto;
+	width: 300px;
 }
 
 .title-section {
