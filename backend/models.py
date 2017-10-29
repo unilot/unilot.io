@@ -8,13 +8,14 @@ from ethereum.utils.web3 import AppWeb3, ContractHelper, AccountHelper, get_conf
 
 
 class Game(models.Model):
-    STATUS_NEW = 0
+    STATUS_NEW       = 0
     STATUS_PUBLISHED = 10
-    STATUS_CANCELED = 20
-    STATUS_FINISHED = 30
+    STATUS_FINISHING = 15
+    STATUS_CANCELED  = 20
+    STATUS_FINISHED  = 30
 
-    TYPE_1_DAY = 10
-    TYPE_7_DAYS = 30
+    TYPE_1_DAY   = 10
+    TYPE_7_DAYS  = 30
     TYPE_30_DAYS = 50
 
     STATUS_LIST = (
@@ -35,7 +36,7 @@ class Game(models.Model):
         TYPE_7_DAYS: 0.05,
     }
 
-    CONTRACT_NAME='UnilotEther'
+    CONTRACT_NAME='UnilotTailEther'
 
     type = models.IntegerField(choices=TYPE_LIST, null=False)
     status = models.IntegerField(choices=STATUS_LIST, null=False, default=STATUS_NEW)
@@ -96,8 +97,8 @@ class Game(models.Model):
         transfer_filter.watch(get_contract_address)
 
         # TODO move prices to config
-        self.transaction_id = contract.deploy(transaction={'from': AccountHelper.get_base_account(), "gasPrice": web3.toWei(25, 'gwei')},
-                                              args=[web3.toWei(0.05, 'ether')])
+        self.transaction_id = contract.deploy(transaction={'from': AccountHelper.get_base_account(), "gasPrice": web3.toWei(25, 'gwei'), "gas": 3000000},
+                                              args=[web3.toWei(0.01, 'ether')])
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
