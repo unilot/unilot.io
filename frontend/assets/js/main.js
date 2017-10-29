@@ -114,7 +114,7 @@
 					Clock Countdown
 		======================================*/
 
-		$('#clock-countdown').countdown('2017/10/20 13:00:00').on('update.countdown', function(event) {
+		$('#clock-countdown').countdown('2018/01/01 13:00:00').on('update.countdown', function(event) {
 			var $this = $(this).html(event.strftime(''
 				+ '<div class="counter-container"><div class="counter-box first"><div class="number">%-D</div><span>Day%!d</span></div>'
 				+ '<div class="counter-box"><div class="number">%H</div><span>Hours</span></div>'

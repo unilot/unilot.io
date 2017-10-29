@@ -22,7 +22,7 @@
                                         <!-- Clock Countdown -->
                                         <div id="clock-countdown" class="animated bounceInDown"
                                              data-animation-delay="700"></div>
-                                        <h3 class="color-white top-margin animated bounceInDown"
+                                        <h3 class="color-black top-margin animated bounceInDown"
                                             data-animation-delay="700">{% trans 'Our website is under construction. We`ll be here soon with our new awesome site, subscribe to be notified.' %}</h3>
 
                                         <!-- Subscribe Form -->
@@ -33,10 +33,13 @@
                                                 <div class="section-page" id="signup">
                                                     <form class="subscription-form mailchimp" method="post"
                                                           id="mc-form">
-                                                        <input type="email" id="email"
-                                                               class="border-radius-22 bottom-margin"
-                                                               name="email"
-                                                               placeholder="{% trans 'Enter Your Email Address' %}"/>
+                                                        {% csrf_token %}
+
+                                                        {{ form }}
+{#                                                        <input type="email" id="email"#}
+{#                                                               class="border-radius-22 bottom-margin"#}
+{#                                                               name="email"#}
+{#                                                               placeholder="{% trans 'Enter Your Email Address' %}"/>#}
                                                         <button type="submit" id="subscribebtn"
                                                                 class="border-button no-bottom-margin">{% trans 'Subscribe' %}
                                                         </button>

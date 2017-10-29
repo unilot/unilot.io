@@ -4,13 +4,13 @@
 .clearfix:after { clear: both; }
 
 a {
-	color: #fff;
+	color: #000;
 	text-decoration: none;
 }
 
 a:hover,
 a:focus {
-	color: #ccc;
+		color: #ccc;
 	outline: none;
 }
 
