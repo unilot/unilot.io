@@ -113,7 +113,7 @@ class Game(models.Model):
     @classmethod
     def filter_active(cls):
         return cls.objects\
-        .filter( started_at__lte=timezone.now(), ending_at__gt=timezone.now(), status=Game.STATUS_PUBLISHED )\
+        .filter( started_at__lte=timezone.now(), ending_at__gt=timezone.now(), status__in=(Game.STATUS_PUBLISHED, Game.STATUS_FINISHING) )\
         .exclude(smart_contract_id__in=('', '0'))
 
     @classmethod
