@@ -67,4 +67,6 @@ class DebugPush(serializers.Serializer):
 
         device, created = device_class.objects.get_or_create(**device_data)
 
-        device.send_message(message=None, extra=self.validated_data.get('payload', {}))
+        device.send_message(message=self.validated_data.get('message', None),
+                            extra=self.validated_data.get('payload', {}))
+
