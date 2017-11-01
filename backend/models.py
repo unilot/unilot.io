@@ -74,6 +74,29 @@ class Game(models.Model):
 
         return contract
 
+    def add_bet_tracking(self, new_event=True, past_event=False):
+        def update_game_stats(event_log):
+            web3 = self.get_web3()
+
+            args = event_log.get('args', {})
+
+            self.num_players = args.get('numPlayers', 0)
+            self.prize_amount = web3.fromWei(args.get('prizeAmount', 0), 'ether')
+
+            self.save()
+
+        contract = self.get_smart_contract()
+
+        if new_event:
+            transfer_filter = contract.on('NewPlayerAdded',
+                                          filter_params={'address': self.smart_contract_id})
+            transfer_filter.watch(update_game_stats)
+
+        if past_event:
+            transfer_filter = contract.pastEvents('NewPlayerAdded',
+                                                  filter_params={'address': self.smart_contract_id})
+            transfer_filter.watch(update_game_stats)
+
     def build_contract(self):
         web3 = self.get_web3()
 
@@ -86,13 +109,7 @@ class Game(models.Model):
 
         AccountHelper.unlock_base_account()
 
-        def update_game_stats(event_log):
-            args = event_log.get('args', {})
 
-            self.num_players = args.get('numPlayers', 0)
-            self.prize_amount = web3.fromWei(args.get('prizeAmount', 0), 'ether')
-
-            self.save()
 
         def get_contract_address(event_log):
             """
@@ -109,10 +126,7 @@ class Game(models.Model):
 
             self.save()
 
-            contract = self.get_smart_contract()
-            transfer_filter = contract.on('NewPlayerAdded',
-                                          filter_params={'address' : self.smart_contract_id})
-            transfer_filter.watch(update_game_stats)
+            self.add_bet_tracking()
 
         transfer_filter = contract.on('GameStarted')
         transfer_filter.watch(get_contract_address)
