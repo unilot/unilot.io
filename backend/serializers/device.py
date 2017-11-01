@@ -3,6 +3,7 @@ from pprint import pprint
 from push_notifications.models import APNSDevice, GCMDevice
 from rest_framework import serializers
 from django.utils.translation import ugettext as _
+from push_notifications.gcm import send_message as gcm_send_message
 
 
 class DeviceOS:
@@ -50,8 +51,8 @@ class CreateDeviceSerializer(serializers.Serializer):
 class DebugPush(serializers.Serializer):
     os = serializers.ChoiceField(choices=DeviceOS.CHOICES)
     token = serializers.CharField(required=True)
-    message = serializers.CharField(required=True)
-    extra = serializers.DictField(required=False)
+    message = serializers.CharField(required=False)
+    payload = serializers.DictField(required=True)
 
     def save(self, **kwargs):
         device_data = {}
@@ -66,14 +67,6 @@ class DebugPush(serializers.Serializer):
 
         device, created = device_class.objects.get_or_create(**device_data)
 
-        """
-        {'canonical_ids': 0,
-         'failure': 1,
-         'multicast_id': 6123991683170184548,
-         'results': [{'error': 'InvalidRegistration'}],
-         'success': 0}
-        """
-        result = device.send_message(message=self.validated_data['message'], extra=self.validated_data.get('extra', {}))
+        device.send_message(message=self.validated_data.get('message', None),
+                            extra=self.validated_data.get('payload', {}))
 
-        if result.get('success') == 0:
-            raise Exception(result.get('results'))
