@@ -1,5 +1,4 @@
 from oauth2_provider.contrib.rest_framework import TokenHasScope
-from random import randint
 from rest_framework import generics
 from rest_framework.response import Response
 from web3.main import Web3
