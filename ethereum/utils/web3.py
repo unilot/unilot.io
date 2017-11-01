@@ -106,6 +106,20 @@ class ContractHelper():
         return bytecode
 
     @staticmethod
+    def getGasPrice():
+        config = get_config()
+        gasPrize = config['GAS_PRICE']
+
+        return Web3.toWei(gasPrize[0], gasPrize[1])
+
+    @staticmethod
+    def getCalculatorContractAddress():
+        config = get_config()
+        address = config['CALCULATOR_CONTRACT_ADDRESS']
+
+        return address
+
+    @staticmethod
     def __build_file_path__(filename):
         return path.join(
             ContractHelper.base_path,
@@ -115,6 +129,7 @@ class ContractHelper():
     def __check_path__(file_path):
         if not path.exists(file_path):
             raise AttributeError(_('Invalid path. File "%s" doesn\'t exist' % file_path))
+
 
 class AccountHelper:
     @staticmethod
