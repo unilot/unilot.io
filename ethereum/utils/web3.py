@@ -62,7 +62,7 @@ class AppWeb3():
 
 class ContractHelper():
     base_path = path.join(
-        path.dirname(path.dirname(__file__)),
+        path.dirname(path.dirname(path.abspath(__file__))),
         'build')
     ABI_FILE_EXT = 'abi'
     BYTECODE_FILE_EXT = 'bytecode'
