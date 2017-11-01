@@ -2,6 +2,7 @@ from oauth2_provider.contrib.rest_framework import TokenHasScope
 from random import randint
 from rest_framework import generics
 from rest_framework.response import Response
+from web3.main import Web3
 
 from backend.models import Game
 from backend.serializers.game import PublicGameSerializer, GameWinner
@@ -28,23 +29,32 @@ class GamePrizesView(generics.RetrieveAPIView):
     serializer_class = GameWinner
 
     def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        num_prizes = randint(0,9)
+        game = self.get_object()
 
         prize_data = []
-        total_prize = instance.prize_amount
-        prize = total_prize/2
 
-        for i in range(0, num_prizes):
-            player_data = {
-                'address': '0x0000000000000000000000000000000000000000',
-                'position': i+1,
-                'prize_amount': prize
-            }
+        if game.status in (Game.STATUS_PUBLISHED, Game.STATUS_FINISHING):
+            i = 1
+            for prize in game.calculate_prizes():
+                prize_data.append({
+                    'address': '0x0000000000000000000000000000000000000000',
+                    'position': i,
+                    'prize_amount': Web3.fromWei(prize, 'ether')
+                })
 
-            prize /= 2
+                i += 1
 
-            prize_data.append(player_data)
+        elif game.status == Game.STATUS_FINISHED:
+            i = 1
+
+            for address, prize in game.get_winners().items():
+                prize_data.append({
+                    'address': address,
+                    'position': i,
+                    'prize_amount': prize
+                })
+
+                i += 1
 
         serializer = GameWinner(prize_data, many=True)
 

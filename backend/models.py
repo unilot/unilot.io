@@ -1,8 +1,11 @@
+from collections import OrderedDict
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 from web3.contract import Contract
+from web3.main import Web3
 
 from ethereum.utils.web3 import AppWeb3, ContractHelper, AccountHelper, get_config
 
@@ -78,10 +81,18 @@ class Game(models.Model):
                                      bytecode=ContractHelper.get_bytecode(self.CONTRACT_NAME),
                                      contract_name=self.CONTRACT_NAME)
         """
-        :type contract: Contract
+        :rtype contract: Contract
         """
 
         AccountHelper.unlock_base_account()
+
+        def update_game_stats(event_log):
+            args = event_log.get('args', {})
+
+            self.num_players = args.get('numPlayers', 0)
+            self.prize_amount = web3.fromWei(args.get('prizeAmount', 0), 'ether')
+
+            self.save()
 
         def get_contract_address(event_log):
             """
@@ -90,16 +101,108 @@ class Game(models.Model):
             :return:
             """
 
-            self.smart_contract_id = event_log['address']
-            self.status = self.STATUS_PUBLISHED
+            if self.smart_contract_id in (None, '0'):
+                self.smart_contract_id = event_log['address']
+
+            if self.status == self.STATUS_NEW:
+                self.status = self.STATUS_PUBLISHED
+
             self.save()
+
+            contract = self.get_smart_contract()
+            transfer_filter = contract.on('NewPlayerAdded',
+                                          filter_params={'address' : self.smart_contract_id})
+            transfer_filter.watch(update_game_stats)
 
         transfer_filter = contract.on('GameStarted')
         transfer_filter.watch(get_contract_address)
 
         # TODO move prices to config
-        self.transaction_id = contract.deploy(transaction={'from': AccountHelper.get_base_account(), "gasPrice": web3.toWei(25, 'gwei'), "gas": 3000000},
-                                              args=[web3.toWei(0.01, 'ether')])
+        self.transaction_id = contract.deploy(transaction={'from': AccountHelper.get_base_account(), "gasPrice": ContractHelper.getGasPrice()},
+                                              args=[web3.toWei(0.01, 'ether'), ContractHelper.getCalculatorContractAddress()])
+
+    def finish(self):
+        if self.smart_contract_id in (None, '0'):
+            raise AttributeError('Invalid smart contract address')
+
+        if self.status != Game.STATUS_PUBLISHED:
+            raise RuntimeError('Invalid status')
+
+        self.status = Game.STATUS_FINISHING
+
+        contract = self.get_smart_contract()
+
+        def finish_game(event_log):
+            """
+            :param event_log:
+            :type dict:
+            :return:
+            """
+
+            self.status = self.STATUS_FINISHED
+            self.save()
+
+
+        transfer_filter = contract.on('GameFinished', filter_params={'address': self.smart_contract_id})
+        transfer_filter.watch(finish_game)
+
+        AccountHelper.unlock_base_account()
+
+        tx = contract.transact(transaction={'from': AccountHelper.get_base_account(),
+                                            'gasPrice': ContractHelper.getGasPrice()}).finish()
+
+        self.save()
+
+        return tx
+
+    def revoke(self):
+        if self.smart_contract_id in (None, '0'):
+            raise AttributeError('Invalid smart contract address')
+
+        if self.status != Game.STATUS_PUBLISHED:
+            raise RuntimeError('Invalid status')
+
+        self.status = Game.STATUS_CANCELED
+
+        contract = self.get_smart_contract()
+
+        AccountHelper.unlock_base_account()
+
+        tx = contract.transact(transaction={'from': AccountHelper.get_base_account(),
+                                            'gasPrice': ContractHelper.getGasPrice()}).revoke()
+
+        self.save()
+
+        return tx
+
+    def get_winners(self):
+        """
+        :rtype: dict
+        """
+        if self.smart_contract_id in (None, '0'):
+            raise AttributeError('Smart contract id can not be empty')
+
+        contract = self.get_smart_contract()
+        winners, prizes = contract.call().getWinners()
+        result = {}
+
+        for i, winner in enumerate(winners):
+            result[winner] = Web3.fromWei(prizes[i], 'ether')
+
+        return OrderedDict(reversed(sorted(result.items(), key=lambda t: t[1])))
+
+    def calculate_prizes(self):
+        """
+        :rtype: list
+        """
+
+        if self.smart_contract_id in (None, '0'):
+            raise AttributeError('Smart contract id can not be empty')
+
+        contract = self.get_smart_contract()
+
+        return contract.call().calcaultePrizes()
+
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
