@@ -4,10 +4,12 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.translation import ugettext as _
+from push_notifications.models import GCMDevice, APNSDevice
 from web3.contract import Contract
 from web3.main import Web3
 
-from ethereum.utils.web3 import AppWeb3, ContractHelper, AccountHelper, get_config
+from backend.serializers import push
+from ethereum.utils.web3 import AppWeb3, ContractHelper, AccountHelper
 
 
 class Game(models.Model):
@@ -84,6 +86,18 @@ class Game(models.Model):
             self.prize_amount = web3.fromWei(args.get('prizeAmount', 0), 'ether')
 
             self.save()
+
+            gcmDevices = GCMDevice.objects.filter()
+            apnsDevices = APNSDevice.objects.filter()
+
+            gcm_push_message = push.GameUpdatedPushMessage(payload=self, is_localized=True)
+            apns_push_message = push.GameUpdatedPushMessage(payload=self, is_localized=False)
+
+            if gcm_push_message.is_valid():
+                gcmDevices.send_message(message=None, extra=gcm_push_message.data)
+
+            if apns_push_message.is_valid():
+                apnsDevices.send_message(message=None, extra=apns_push_message.data)
 
         contract = self.get_smart_contract()
 
