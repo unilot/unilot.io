@@ -17,7 +17,7 @@ def add_bet_tracking(modeladmin, request, queryset):
     games = queryset.all()
 
     for game in games:
-        game.add_bet_tracking(True, False)
+        game.add_bet_tracking(True, True)
 
 add_bet_tracking.short_description = _('Add bet tracking to models')
 
