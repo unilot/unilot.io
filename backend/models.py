@@ -82,22 +82,25 @@ class Game(models.Model):
 
             args = event_log.get('args', {})
 
-            self.num_players = args.get('numPlayers', 0)
-            self.prize_amount = web3.fromWei(args.get('prizeAmount', 0), 'ether')
+            num_players = args.get('numPlayers', 0)
 
-            self.save()
+            if num_players > self.num_players:
+                self.num_players = num_players
+                self.prize_amount = web3.fromWei(args.get('prizeAmount', 0), 'ether')
 
-            gcmDevices = GCMDevice.objects.filter()
-            apnsDevices = APNSDevice.objects.filter()
+                self.save()
 
-            gcm_push_message = push.GameUpdatedPushMessage(payload=self, is_localized=True)
-            apns_push_message = push.GameUpdatedPushMessage(payload=self, is_localized=False)
+                gcmDevices = GCMDevice.objects.filter()
+                apnsDevices = APNSDevice.objects.filter()
 
-            if gcm_push_message.is_valid():
-                gcmDevices.send_message(message=None, extra=gcm_push_message.data)
+                gcm_push_message = push.GameUpdatedPushMessage(payload=self, is_localized=True)
+                apns_push_message = push.GameUpdatedPushMessage(payload=self, is_localized=False)
 
-            if apns_push_message.is_valid():
-                apnsDevices.send_message(message=None, extra=apns_push_message.data)
+                if gcm_push_message.is_valid():
+                    gcmDevices.send_message(message=None, extra=gcm_push_message.data)
+
+                if apns_push_message.is_valid():
+                    apnsDevices.send_message(message=None, extra=apns_push_message.data)
 
         contract = self.get_smart_contract()
 
