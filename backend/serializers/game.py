@@ -1,9 +1,8 @@
 from decimal import Decimal
-from pprint import pprint
 
-from django.db.models.query_utils import DeferredAttribute
 from rest_framework import serializers
 from backend.models import Game, ExchangeRate
+
 
 class FiatExchangeCalculatorMixin():
     def convert_amount_to_fiat(self, obj, attribute_name='prize_amount'):
@@ -14,9 +13,9 @@ class FiatExchangeCalculatorMixin():
         """
 
         if type(obj) is dict:
-            amount = Decimal(obj[attribute_name])
+            amount = float(obj[attribute_name])
         else:
-            amount = Decimal(getattr(obj, attribute_name, 0))
+            amount = float(getattr(obj, attribute_name, 0))
 
         if amount <= 0:
             return 0
@@ -27,11 +26,10 @@ class FiatExchangeCalculatorMixin():
         :type latest_exchange_rate: ExchangeRate
         """
 
-        return (amount * Decimal(latest_exchange_rate.rate))
+        return (amount * float(latest_exchange_rate.rate))
 
 class PublicGameSerializer(serializers.ModelSerializer, FiatExchangeCalculatorMixin):
     prize_amount_fiat = serializers.SerializerMethodField(method_name='convert_amount_to_fiat')
-
 
     class Meta:
         model = Game

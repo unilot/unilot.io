@@ -1,5 +1,3 @@
-from pprint import pprint
-
 from push_notifications.models import APNSDevice, GCMDevice
 from rest_framework import serializers
 from django.utils.translation import ugettext as _
