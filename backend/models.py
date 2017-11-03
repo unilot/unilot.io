@@ -52,6 +52,7 @@ class Game(models.Model):
     prize_amount = models.FloatField(null=True, default=0)
     num_players = models.IntegerField(null=True, default=0)
     user = models.ForeignKey(User, null=True, on_delete=models.deletion.PROTECT, related_name='game')
+    bet_amount = models.FloatField(null=False, default=0.01)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     started_at = models.DateTimeField()
