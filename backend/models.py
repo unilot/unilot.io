@@ -10,6 +10,7 @@ from web3.main import Web3
 
 from backend.serializers import push
 from ethereum.utils.web3 import AppWeb3, ContractHelper, AccountHelper
+from frontend.utils.push import PushHelper
 
 
 class Game(models.Model):
@@ -90,17 +91,10 @@ class Game(models.Model):
 
                 self.save()
 
-                gcmDevices = GCMDevice.objects.filter()
-                apnsDevices = APNSDevice.objects.filter()
-
                 gcm_push_message = push.GameUpdatedPushMessage(payload=self, is_localized=True)
                 apns_push_message = push.GameUpdatedPushMessage(payload=self, is_localized=False)
 
-                if gcm_push_message.is_valid():
-                    gcmDevices.send_message(message=None, extra=gcm_push_message.data)
-
-                if apns_push_message.is_valid():
-                    apnsDevices.send_message(message=None, extra=apns_push_message.data)
+                PushHelper.inform_all_devices(gcm_push_message, apns_push_message)
 
         contract = self.get_smart_contract()
 
@@ -173,6 +167,13 @@ class Game(models.Model):
             self.status = self.STATUS_FINISHED
             self.save()
 
+            list_of_winners = self.get_winners().keys()
+
+            gcm_push_message = push.GameFinishedPushMessage(data={'data': list_of_winners}, is_localized=True)
+            apns_push_message = push.GameFinishedPushMessage(data={'data': list_of_winners}, is_localized=False)
+
+            PushHelper.inform_all_devices(gcm_push_message, apns_push_message)
+
 
         transfer_filter = contract.on('GameFinished', filter_params={'address': self.smart_contract_id})
         transfer_filter.watch(finish_game)
@@ -183,6 +184,13 @@ class Game(models.Model):
                                             'gasPrice': ContractHelper.getGasPrice()}).finish()
 
         self.save()
+
+
+        gcm_push_message = push.GameUnpublishedPushMessage(payload=self, is_localized=True)
+        apns_push_message = push.GameUnpublishedPushMessage(payload=self, is_localized=False)
+
+        PushHelper.inform_all_devices(gcm_push_message, apns_push_message)
+
 
         return tx
 
