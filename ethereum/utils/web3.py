@@ -30,18 +30,14 @@ def get_config():
 
 
 class AppWeb3():
-    __web3__ = None
-
 
     @staticmethod
     def get_web3():
         """
         :rtype: Web3
         """
-        if not AppWeb3.__web3__:
-            AppWeb3.__web3__ = AppWeb3.__web3_factory__()
 
-        return AppWeb3.__web3__
+        return AppWeb3.__web3_factory__()
 
     @staticmethod
     def __web3_factory__():
