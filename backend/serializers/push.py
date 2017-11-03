@@ -74,7 +74,7 @@ class PushMessage(serializers.Serializer):
         raise NotImplementedError()
 
 
-class GameUpdatedPushMessage(PushMessage, GameAsPayloadMixin):
+class GameUpdatedPushMessage(GameAsPayloadMixin, PushMessage):
 
     @staticmethod
     def message_text():
@@ -84,7 +84,7 @@ class GameUpdatedPushMessage(PushMessage, GameAsPayloadMixin):
         return PushAction.GAME_UPDATED
 
 
-class GameUnpublishedPushMessage(PushMessage, GameAsPayloadMixin):
+class GameUnpublishedPushMessage(GameAsPayloadMixin, PushMessage):
 
     @staticmethod
     def message_text():
