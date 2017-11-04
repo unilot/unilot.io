@@ -42,7 +42,10 @@ class PublicGameSerializer(serializers.ModelSerializer, FiatExchangeCalculatorMi
 
     def __get_stat__(self, game):
         if self.__stat__ is None:
-            self.__stat__ = game.get_stat()
+            self.__stat__ = {}
+
+        if self.__stat__.get('g%d' % (game.id), None) is None:
+            self.__stat__['g%d' % (game.id)] = game.get_stat()
 
         return self.__stat__
 
