@@ -41,13 +41,15 @@ class PublicGameSerializer(serializers.ModelSerializer, FiatExchangeCalculatorMi
     prize_amount = serializers.SerializerMethodField()
 
     def __get_stat__(self, game):
+        key = 'g%d' % (game.id)
+
         if self.__stat__ is None:
             self.__stat__ = {}
 
-        if self.__stat__.get('g%d' % (game.id), None) is None:
-            self.__stat__['g%d' % (game.id)] = game.get_stat()
+        if self.__stat__.get(key, None) is None:
+            self.__stat__[key] = game.get_stat()
 
-        return self.__stat__
+        return self.__stat__.get(key)
 
     def get_num_players(self, obj):
         try:
@@ -66,7 +68,7 @@ class PublicGameSerializer(serializers.ModelSerializer, FiatExchangeCalculatorMi
         except:
             pass
 
-        if result > 0:
+        if result is not None and result > 0:
             result = Web3.fromWei(result, 'ether')
         else:
             result = getattr(obj, 'prize_amount')
