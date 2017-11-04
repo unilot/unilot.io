@@ -1,16 +1,15 @@
 from collections import OrderedDict
 
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext as _
-from push_notifications.models import GCMDevice, APNSDevice
 from web3.contract import Contract
 from web3.main import Web3
 
 from backend.serializers import push
+from backend.utils.push import PushHelper
 from ethereum.utils.web3 import AppWeb3, ContractHelper, AccountHelper
-from frontend.utils.push import PushHelper
 
 
 class Game(models.Model):
@@ -144,8 +143,9 @@ class Game(models.Model):
         transfer_filter.watch(get_contract_address)
 
         # TODO move prices to config
-        self.transaction_id = contract.deploy(transaction={'from': AccountHelper.get_base_account(), "gasPrice": ContractHelper.getGasPrice()},
-                                              args=[web3.toWei(0.01, 'ether'), ContractHelper.getCalculatorContractAddress()])
+        self.transaction_id = contract.deploy(
+            transaction={'from': AccountHelper.get_base_account(), "gasPrice": ContractHelper.getGasPrice()},
+            args=[web3.toWei(self.bet_amount, 'ether'), ContractHelper.getCalculatorContractAddress()])
 
     def finish(self):
         if self.smart_contract_id in (None, '0'):
@@ -175,14 +175,28 @@ class Game(models.Model):
 
             PushHelper.inform_all_devices(gcm_push_message, apns_push_message)
 
+        keep_going = None
 
-        transfer_filter = contract.on('GameFinished', filter_params={'address': self.smart_contract_id})
-        transfer_filter.watch(finish_game)
+        while keep_going is None:
+            try:
+                transfer_filter = contract.on('GameFinished', filter_params={'address': self.smart_contract_id})
+                transfer_filter.watch(finish_game)
+                keep_going = True
+            except:
+                pass
 
-        AccountHelper.unlock_base_account()
+        keep_going = None
 
-        tx = contract.transact(transaction={'from': AccountHelper.get_base_account(),
-                                            'gasPrice': ContractHelper.getGasPrice()}).finish()
+        while keep_going is None:
+            try:
+                AccountHelper.unlock_base_account()
+
+                tx = contract.transact(transaction={'from': AccountHelper.get_base_account(),
+                                                    'gasPrice': ContractHelper.getGasPrice()}).finish()
+
+                keep_going = True
+            except:
+                pass
 
         self.save()
 

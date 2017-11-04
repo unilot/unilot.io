@@ -7,9 +7,10 @@ from sportloto.settings import LANGUAGES
 
 
 class PushAction():
-    GAME_UPDATED     = 'game_updated'
+    GAME_STARTED = 'game_started'
+    GAME_UPDATED = 'game_updated'
     GAME_UNPUBLISHED = 'game_unpublished'
-    GAME_FINISHED    = 'game_finished'
+    GAME_FINISHED = 'game_finished'
 
 
 class GameAsPayloadMixin():
@@ -104,3 +105,12 @@ class GameFinishedPushMessage(PushMessage):
 
     def get_action(self, *args, **kwargs):
         return PushAction.GAME_FINISHED
+
+
+class GameStartedPushMessage(GameAsPayloadMixin, PushMessage):
+    @staticmethod
+    def message_text():
+        return 'New Game Started!'
+
+    def get_action(self, *args, **kwargs):
+        return PushAction.GAME_STARTED
