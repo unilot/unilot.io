@@ -59,6 +59,7 @@ class GamePrizesView(generics.RetrieveAPIView):
 
         return Response(serializer.data)
 
+
 class GameArchivedView(generics.ListAPIView):
     permission_classes = [TokenHasScope]
     required_scopes = ['read']

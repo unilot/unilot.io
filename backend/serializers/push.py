@@ -97,7 +97,27 @@ class GameUnpublishedPushMessage(GameAsPayloadMixin, PushMessage):
 
 class GameFinishedPushMessage(PushMessage):
 
-    data = serializers.ListField(allow_empty=False)
+    def __message_init__(self, *args, **kwargs):
+        from backend.models import Game
+
+        payload = kwargs.pop('payload', None)
+
+        if not isinstance(payload, Game):
+            raise AttributeError('payload should be instance of Game model')
+
+        game_data = {'data': {
+                'id': payload.id,
+                'winners': list([payload.get_winners().keys()])
+            }
+        }
+
+        data = kwargs.pop('data', {})
+
+        data = {**data, **game_data}
+
+        kwargs['data'] = data
+
+        return super().__message_init__(*args, **kwargs)
 
     @staticmethod
     def message_text():

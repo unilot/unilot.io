@@ -246,7 +246,8 @@ class Game(models.Model):
         winners, prizes = contract.call().getWinners()
         result = {}
 
-        for i, winner in enumerate(winners):
+        #Setting address
+        for i, winner in enumerate([w_player.lower() for w_player in winners]):
             result[winner] = Web3.fromWei(prizes[i], 'ether')
 
         return OrderedDict(reversed(sorted(result.items(), key=lambda t: t[1])))
@@ -300,7 +301,9 @@ class Game(models.Model):
     @classmethod
     def filter_active(cls):
         return cls.objects\
-        .filter( started_at__lte=timezone.now(), ending_at__gt=timezone.now(), status__in=(Game.STATUS_PUBLISHED, Game.STATUS_FINISHING) )\
+        .filter( started_at__lte=timezone.now(),
+                 ending_at__gt=timezone.now(),
+                 status__in=(Game.STATUS_PUBLISHED, Game.STATUS_FINISHING) )\
         .exclude(smart_contract_id__in=('', '0'))
 
     @classmethod
