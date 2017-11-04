@@ -231,6 +231,18 @@ class Game(models.Model):
 
         return OrderedDict(reversed(sorted(result.items(), key=lambda t: t[1])))
 
+
+    def get_stat(self):
+        contract = self.get_smart_contract()
+
+        num_players, prize_amount, num_winners = contract.call().getStat()
+
+        return {
+            'numPlayers': num_players,
+            'prizeAmount': prize_amount,
+            'numWinners': num_winners
+        }
+
     def calculate_prizes(self):
         """
         :rtype: list
