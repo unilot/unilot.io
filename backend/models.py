@@ -42,6 +42,12 @@ class Game(models.Model):
         TYPE_7_DAYS: 0.05,
     }
 
+    CONTRACT_STATUS_MAP = {
+        '0': STATUS_PUBLISHED,
+        '1': STATUS_FINISHED,
+        '3': STATUS_CANCELED
+    }
+
     CONTRACT_NAME='UnilotTailEther'
 
     type = models.IntegerField(choices=TYPE_LIST, null=False)
@@ -256,6 +262,18 @@ class Game(models.Model):
             'prizeAmount': prize_amount,
             'numWinners': num_winners
         }
+
+    def get_state(self):
+        contract = self.get_smart_contract()
+
+        state = contract.call().getState()
+
+        result = self.CONTRACT_STATUS_MAP.get(str(state))
+
+        if result is None:
+            result = self.status
+
+        return result
 
     def calculate_prizes(self):
         """
