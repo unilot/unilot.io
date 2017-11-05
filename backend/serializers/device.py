@@ -1,7 +1,6 @@
 from push_notifications.models import APNSDevice, GCMDevice
 from rest_framework import serializers
 from django.utils.translation import ugettext as _
-from push_notifications.gcm import send_message as gcm_send_message
 
 
 class DeviceOS:

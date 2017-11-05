@@ -36,11 +36,8 @@ class GameAsPayloadMixin():
 
 
 class PushMessage(serializers.Serializer):
-    __is_localized__ = False
 
     def __init__(self, *args, **kwargs):
-        self.__is_localized__ = kwargs.pop('is_localized', False)
-
         n_args, n_kwargs = self.__message_init__(*args, **kwargs)
 
         super(PushMessage, self).__init__(*n_args, **n_kwargs)
@@ -54,16 +51,13 @@ class PushMessage(serializers.Serializer):
         return (args, kwargs)
 
     def build_message(self, *args, **kwarg):
-        if self.__is_localized__:
-            result = {}
+        result = {}
 
-            for language in LANGUAGES:
-                lang_code, lang_name = language
+        for language in LANGUAGES:
+            lang_code, lang_name = language
 
-                activate(lang_code)
-                result[lang_code] = _(self.message_text())
-        else:
-            result = self.message_text()
+            activate(lang_code)
+            result[lang_code] = _(self.message_text())
 
         return result
 

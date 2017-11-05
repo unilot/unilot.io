@@ -1,3 +1,5 @@
+import pprint
+
 from django.core.management.base import BaseCommand, CommandError
 from backend.models import Game
 from django.utils import timezone
@@ -15,7 +17,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         try:
-            games = Game.objects.filter(status__in=(Game.STATUS_PUBLISHED, Game.STATUS_FINISHING), ending_at__lte=timezone.now()).all()
+            games = Game.objects.filter(status__in=(Game.STATUS_PUBLISHED, Game.STATUS_FINISHING),
+                                        ending_at__lte=timezone.now()).all()
 
             for game in games:
                 if game.smart_contract_id in (None, '', '0'):
@@ -38,10 +41,9 @@ class Command(BaseCommand):
                     game.status = Game.STATUS_FINISHED
                     game.save()
 
-                    gcm_push_message = push.GameFinishedPushMessage(payload=game, is_localized=True)
-                    apns_push_message = push.GameFinishedPushMessage(payload=game, is_localized=False)
+                    push_message = push.GameFinishedPushMessage(payload=game)
 
-                    PushHelper.inform_all_devices(gcm_push_message, apns_push_message)
+                    PushHelper.inform_all_devices(push_message)
 
         except Game.DoesNotExist:
             print('No games to proceed')

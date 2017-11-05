@@ -97,10 +97,9 @@ class Game(models.Model):
 
                 self.save()
 
-                gcm_push_message = push.GameUpdatedPushMessage(payload=self, is_localized=True)
-                apns_push_message = push.GameUpdatedPushMessage(payload=self, is_localized=False)
+                push_message = push.GameUpdatedPushMessage(payload=self)
 
-                PushHelper.inform_all_devices(gcm_push_message, apns_push_message)
+                PushHelper.inform_all_devices(push_message)
 
         contract = self.get_smart_contract()
 
@@ -171,10 +170,9 @@ class Game(models.Model):
 
         self.save()
 
-        gcm_push_message = push.GameUnpublishedPushMessage(payload=self, is_localized=True)
-        apns_push_message = push.GameUnpublishedPushMessage(payload=self, is_localized=False)
+        push_message = push.GameUnpublishedPushMessage(payload=self)
 
-        PushHelper.inform_all_devices(gcm_push_message, apns_push_message)
+        PushHelper.inform_all_devices(push_message)
 
         return tx
 

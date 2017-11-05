@@ -73,7 +73,7 @@ class PublicGameSerializer(serializers.ModelSerializer, FiatExchangeCalculatorMi
         else:
             result = float(getattr(obj, 'prize_amount'))
 
-        return result
+        return float(result)
 
     def get_bet_amount_fiat(self, obj):
         return self.convert_amount_to_fiat(obj, attribute_name='bet_amount')
