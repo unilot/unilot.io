@@ -159,6 +159,14 @@ class Game(models.Model):
         if self.status != Game.STATUS_PUBLISHED:
             raise RuntimeError('Invalid status')
 
+        num_players = self.get_stat().get('numPlayers', 0)
+
+        if num_players <= 5:
+            self.ending_at += timezone.timedelta(hours=24)
+            self.save()
+
+            return None
+
         self.status = Game.STATUS_FINISHING
         self.ending_at += timezone.timedelta(hours=1)
 
@@ -212,6 +220,14 @@ class Game(models.Model):
             result[winner] = Web3.fromWei(prizes[i], 'ether')
 
         return OrderedDict(reversed(sorted(result.items(), key=lambda t: t[1])))
+
+    def get_players(self):
+        if self.smart_contract_id in (None, '0'):
+            raise AttributeError('Smart contract id can not be empty')
+
+        contract = self.get_smart_contract()
+
+        return contract.call().getPlayers()
 
 
     def get_stat(self):
