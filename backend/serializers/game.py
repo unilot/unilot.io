@@ -20,6 +20,9 @@ class FiatExchangeCalculatorMixin():
         if amount <= 0:
             return 0
 
+        return self.calculate_fiat_amount(amount)
+
+    def calculate_fiat_amount(self, amount):
         latest_exchange_rate = ExchangeRate.objects.order_by('-created_at').first()
         """
         :var latest_exchange_rate:
@@ -28,6 +31,7 @@ class FiatExchangeCalculatorMixin():
 
         return (amount * float(latest_exchange_rate.rate))
 
+
 class PublicGameSerializer(serializers.ModelSerializer, FiatExchangeCalculatorMixin):
     __stat__ = None
     """
@@ -35,7 +39,7 @@ class PublicGameSerializer(serializers.ModelSerializer, FiatExchangeCalculatorMi
     :type dict:
     """
 
-    prize_amount_fiat = serializers.SerializerMethodField(method_name='convert_amount_to_fiat')
+    prize_amount_fiat = serializers.SerializerMethodField()
     bet_amount_fiat = serializers.SerializerMethodField()
     num_players = serializers.SerializerMethodField()
     prize_amount = serializers.SerializerMethodField()
@@ -74,6 +78,9 @@ class PublicGameSerializer(serializers.ModelSerializer, FiatExchangeCalculatorMi
             result = float(getattr(obj, 'prize_amount'))
 
         return float(result)
+
+    def get_prize_amount_fiat(self, obj):
+        return self.calculate_fiat_amount(self.get_prize_amount(obj))
 
     def get_bet_amount_fiat(self, obj):
         return self.convert_amount_to_fiat(obj, attribute_name='bet_amount')
