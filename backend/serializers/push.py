@@ -107,7 +107,7 @@ class GameFinishedPushMessage(PushMessage):
 
         game_data = {'data': {
                 'id': payload.id,
-                'winners': list([payload.get_winners().keys()])
+                'winners': list(payload.get_winners().keys())
             }
         }
 
