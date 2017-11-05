@@ -38,10 +38,8 @@ class Command(BaseCommand):
                     game.status = Game.STATUS_FINISHED
                     game.save()
 
-                    list_of_winners = game.get_winners().keys()
-
-                    gcm_push_message = push.GameFinishedPushMessage(data={'data': list_of_winners}, is_localized=True)
-                    apns_push_message = push.GameFinishedPushMessage(data={'data': list_of_winners}, is_localized=False)
+                    gcm_push_message = push.GameFinishedPushMessage(payload=game, is_localized=True)
+                    apns_push_message = push.GameFinishedPushMessage(payload=game, is_localized=False)
 
                     PushHelper.inform_all_devices(gcm_push_message, apns_push_message)
 
