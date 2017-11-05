@@ -161,57 +161,20 @@ class Game(models.Model):
             raise RuntimeError('Invalid status')
 
         self.status = Game.STATUS_FINISHING
+        self.ending_at += timezone.timedelta(hours=1)
+
+        AccountHelper.unlock_base_account()
 
         contract = self.get_smart_contract()
-
-        def finish_game(event_log):
-            """
-            :param event_log:
-            :type dict:
-            :return:
-            """
-
-            self.status = self.STATUS_FINISHED
-            self.save()
-
-            list_of_winners = self.get_winners().keys()
-
-            gcm_push_message = push.GameFinishedPushMessage(data={'data': list_of_winners}, is_localized=True)
-            apns_push_message = push.GameFinishedPushMessage(data={'data': list_of_winners}, is_localized=False)
-
-            PushHelper.inform_all_devices(gcm_push_message, apns_push_message)
-
-        keep_going = None
-
-        while keep_going is None:
-            try:
-                transfer_filter = contract.on('GameFinished', filter_params={'address': self.smart_contract_id})
-                transfer_filter.watch(finish_game)
-                keep_going = True
-            except:
-                pass
-
-        keep_going = None
-
-        while keep_going is None:
-            try:
-                AccountHelper.unlock_base_account()
-
-                tx = contract.transact(transaction={'from': AccountHelper.get_base_account(),
-                                                    'gasPrice': ContractHelper.getGasPrice()}).finish()
-
-                keep_going = True
-            except:
-                pass
+        tx = contract.transact(transaction={'from': AccountHelper.get_base_account(),
+                                            'gasPrice': ContractHelper.getGasPrice()}).finish()
 
         self.save()
-
 
         gcm_push_message = push.GameUnpublishedPushMessage(payload=self, is_localized=True)
         apns_push_message = push.GameUnpublishedPushMessage(payload=self, is_localized=False)
 
         PushHelper.inform_all_devices(gcm_push_message, apns_push_message)
-
 
         return tx
 
