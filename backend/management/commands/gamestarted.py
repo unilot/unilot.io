@@ -22,10 +22,9 @@ class Command(BaseCommand):
                 ending_at__gte=timezone.now()).all()
 
             for game in games:
-                gcm_push_message = push.GameStartedPushMessage(payload=game, is_localized=True)
-                apns_push_message = push.GameStartedPushMessage(payload=game, is_localized=False)
+                push_message = push.GameStartedPushMessage(payload=game)
 
-                PushHelper.inform_all_devices(gcm_push_message, apns_push_message)
+                PushHelper.inform_all_devices(push_message)
 
         except Game.DoesNotExist:
             print('No games to proceed')

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import ugettext as _
 
-from .models import Game, UserTelegram, ExchangeRate
+from . import models
 
 
 def add_bet_tracking(modeladmin, request, queryset):
@@ -24,5 +24,5 @@ add_bet_tracking.short_description = _('Add bet tracking to models')
 class GameAdmin(admin.ModelAdmin):
     actions = [add_bet_tracking]
 
-admin.site.register((UserTelegram, ExchangeRate))
-admin.site.register(Game, GameAdmin)
+admin.site.register((models.UserTelegram, models.ExchangeRate))
+admin.site.register(models.Game, GameAdmin)
