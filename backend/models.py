@@ -10,6 +10,7 @@ from web3.main import Web3
 from backend.serializers import push
 from backend.utils.push import PushHelper
 from ethereum.utils.web3 import AppWeb3, ContractHelper, AccountHelper
+from web3.utils.compat import socket
 
 
 class Game(models.Model):
@@ -170,11 +171,25 @@ class Game(models.Model):
         self.status = Game.STATUS_FINISHING
         self.ending_at += timezone.timedelta(hours=1)
 
-        AccountHelper.unlock_base_account()
+        keep_trying = True
 
-        contract = self.get_smart_contract()
-        tx = contract.transact(transaction={'from': AccountHelper.get_base_account(),
-                                            'gasPrice': ContractHelper.getGasPrice()}).finish()
+        while keep_trying:
+            try:
+                AccountHelper.unlock_base_account()
+                keep_trying = False
+            except socket.timeout:
+                keep_trying = True
+
+        keep_trying = True
+
+        while keep_trying:
+            try:
+                contract = self.get_smart_contract()
+                tx = contract.transact(transaction={'from': AccountHelper.get_base_account(),
+                                                    'gasPrice': ContractHelper.getGasPrice()}).finish()
+                keep_trying = False
+            except socket.timeout:
+                keep_trying = True
 
         self.save()
 
