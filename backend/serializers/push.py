@@ -11,6 +11,18 @@ class PushAction():
     GAME_UPDATED = 'game_updated'
     GAME_UNPUBLISHED = 'game_unpublished'
     GAME_FINISHED = 'game_finished'
+    GAME_CANCELED = 'game_canceled'
+
+    ACTIONS_LIST = (GAME_STARTED,
+                    GAME_UPDATED,
+                    GAME_UNPUBLISHED,
+                    GAME_FINISHED)
+    CHOICES = (
+        (GAME_STARTED, _('Game started')),
+        (GAME_UPDATED, _('Game updated')),
+        (GAME_UNPUBLISHED, _('Game unpublished')),
+        (GAME_FINISHED, _('Game finished')),
+    )
 
 
 class GameAsPayloadMixin():
