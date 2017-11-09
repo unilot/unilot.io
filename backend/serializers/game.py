@@ -2,6 +2,9 @@ from rest_framework import serializers
 from web3.main import Web3
 
 from backend.models import Game, ExchangeRate
+from backend.serializers import push
+from backend.serializers.device import DeviceOS
+from backend.serializers.push import PushAction
 
 
 class FiatExchangeCalculatorMixin():
@@ -95,3 +98,31 @@ class GameWinner(serializers.Serializer, FiatExchangeCalculatorMixin):
     position = serializers.IntegerField()
     prize_amount = serializers.FloatField()
     prize_amount_fiat = serializers.SerializerMethodField(method_name='convert_amount_to_fiat')
+
+
+class GameDebugPush(serializers.Serializer):
+    os = serializers.ChoiceField(choices=DeviceOS.CHOICES, required=False)
+    token = serializers.CharField(required=False)
+    action = serializers.ChoiceField(choices=PushAction.CHOICES, required=True)
+
+    def get_push_message(self, type, game):
+        """
+        :param type:
+        :type str:
+        :param game:
+        :type Game:
+        :rtype push.PushMessage:
+        """
+        cls_map = {
+            PushAction.GAME_STARTED: push.GameStartedPushMessage,
+            PushAction.GAME_UPDATED: push.GameUpdatedPushMessage,
+            PushAction.GAME_UNPUBLISHED: push.GameUnpublishedPushMessage,
+            PushAction.GAME_FINISHED: push.GameUnpublishedPushMessage
+        }
+
+        cls = cls_map.get(type, None)
+
+        if cls is None:
+            raise AttributeError('Type "%s" is invalid' % (type))
+
+        return cls(payload=game)

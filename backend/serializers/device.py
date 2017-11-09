@@ -44,26 +44,3 @@ class CreateDeviceSerializer(serializers.Serializer):
         instance = DummyDeviceObject(**device_data)
 
         return instance
-
-class DebugPush(serializers.Serializer):
-    os = serializers.ChoiceField(choices=DeviceOS.CHOICES)
-    token = serializers.CharField(required=True)
-    message = serializers.CharField(required=False)
-    payload = serializers.DictField(required=True)
-
-    def save(self, **kwargs):
-        device_data = {}
-
-        if self.validated_data['os'] == DeviceOS.IOS:
-            device_class = APNSDevice
-        else:
-            device_data['cloud_message_type'] = 'FCM'
-            device_class = GCMDevice
-
-        device_data['registration_id'] = self.validated_data['token']
-
-        device, created = device_class.objects.get_or_create(**device_data)
-
-        device.send_message(message=self.validated_data.get('message', None),
-                            extra=self.validated_data.get('payload', {}))
-

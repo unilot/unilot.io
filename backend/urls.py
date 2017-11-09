@@ -12,5 +12,5 @@ urlpatterns = [
 
 if DEBUG:
     urlpatterns += [
-        url(r'^device/push(|/)$', devices.SendPushView.as_view(), name='debug_push')
+        url(r'^games/(?P<pk>\d+)/push(|/)$', games.GameDebugPushView.as_view(), name='game_push')
     ]
