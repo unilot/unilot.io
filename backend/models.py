@@ -302,7 +302,7 @@ class Game(models.Model):
     def filter_archived(cls):
         return cls.objects\
         .filter( ending_at__lte=timezone.now() )\
-        .exclude(smart_contract_id__in=('', '0'), status__in=(Game.STATUS_PUBLISHED, Game.STATUS_NEW))
+        .exclude(smart_contract_id__in=('', '0'), status__in=(Game.STATUS_NEW))
 
     def __str__(self):
         return '%d - %s' % (self.id, ( self.smart_contract_id if self.smart_contract_id else '%s in progress' % self.transaction_id ) )

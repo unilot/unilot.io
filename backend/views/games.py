@@ -71,7 +71,7 @@ class GameArchivedView(generics.ListAPIView):
 
 
 class GameDebugPushView(generics.CreateAPIView):
-    permission_classes = [TokenHasScope]
+    permission_classes = []
     required_scopes = ['read']
     queryset = Game.objects.filter()
     serializer_class = GameDebugPush
