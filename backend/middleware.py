@@ -23,13 +23,15 @@ class ApiVersionControlMiddleware(object):
         :return:
         """
 
-        requested_api_version = sv.Spec(request.META.get(self.HTTP_API_VERSION, settings.VERSION))
+        try:
+            requested_api_version = sv.Spec(request.META.get(self.HTTP_API_VERSION, settings.VERSION))
 
-        if not requested_api_version.match(sv.Version(settings.VERSION)):
+            if not requested_api_version.match(sv.Version(settings.VERSION)):
+                raise ValueError()
+            else:
+                response = self.get_response(request)
+        except ValueError:
             response = rf_response.Response(status=status.HTTP_417_EXPECTATION_FAILED)
             response._is_rendered = True
-        else:
-            response = self.get_response(request)
-
 
         return response
