@@ -166,6 +166,10 @@ class Game(models.Model):
             self.ending_at += timezone.timedelta(hours=24)
             self.save()
 
+            push_message = push.GameUpdatedPushMessage(payload=self)
+
+            PushHelper.inform_all_devices(push_message)
+
             return None
 
         self.status = Game.STATUS_FINISHING
