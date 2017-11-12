@@ -162,7 +162,7 @@ class Game(models.Model):
 
         num_players = self.get_stat().get('numPlayers', 0)
 
-        if num_players <= 5:
+        if num_players < 5:
             self.ending_at += timezone.timedelta(hours=24)
             self.save()
 
