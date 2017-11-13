@@ -66,7 +66,7 @@ class GamePrizesView(generics.RetrieveAPIView):
 class GameArchivedView(generics.ListAPIView):
     permission_classes = [TokenHasScope]
     required_scopes = ['read']
-    queryset = Game.filter_archived()
+    queryset = Game.filter_archived().order_by('-ending_at')
     serializer_class = PublicGameSerializer
 
 
