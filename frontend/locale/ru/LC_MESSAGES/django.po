@@ -158,3 +158,6 @@ msgstr "Начался выбор победителя!"
 
 msgid "Game finished!"
 msgstr "Игра окончена!"
+
+msgid "New Game Started!"
+msgstr "Началась новая игра!"
