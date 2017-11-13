@@ -305,7 +305,7 @@ class Game(models.Model):
     @classmethod
     def filter_archived(cls):
         return cls.objects\
-        .filter( ending_at__lte=timezone.now() )\
+        .filter( started_at__lte=timezone.now() )\
         .exclude(smart_contract_id__in=('', '0'), status=Game.STATUS_NEW)
 
     def __str__(self):
