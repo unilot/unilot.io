@@ -117,7 +117,7 @@ class GameDebugPush(serializers.Serializer):
             PushAction.GAME_STARTED: push.GameStartedPushMessage,
             PushAction.GAME_UPDATED: push.GameUpdatedPushMessage,
             PushAction.GAME_UNPUBLISHED: push.GameUnpublishedPushMessage,
-            PushAction.GAME_FINISHED: push.GameUnpublishedPushMessage
+            PushAction.GAME_FINISHED: push.GameFinishedPushMessage
         }
 
         cls = cls_map.get(type, None)
