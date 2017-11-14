@@ -17,8 +17,8 @@ class PushHelper:
         else:
             devices = APNSDevice.objects.get(registration_id=token)
 
-        devices.send_message(message=None, extra=push_message.data, content_available=True,
-                                     sound='chime.aiff')
+        devices.send_message(message=push_message.data.get('message', {}).get('en'), extra=push_message.data,
+                             content_available=True, mutable_content=True, sound='chime.aiff')
 
     @staticmethod
     def inform_gcm_devices(push_message, token=None):
