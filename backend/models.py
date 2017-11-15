@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext as _
+from push_notifications.models import APNSDevice, GCMDevice
 from web3.contract import Contract
 from web3.main import Web3
 
@@ -11,6 +12,7 @@ from backend.serializers import push
 from backend.utils.push import PushHelper
 from ethereum.utils.web3 import AppWeb3, ContractHelper, AccountHelper
 from web3.utils.compat import socket
+from sportloto import settings
 
 
 class Game(models.Model):
@@ -333,3 +335,14 @@ class ExchangeRate(models.Model):
     currency = models.IntegerField(null=False, choices=CURRENCY_LIST)
     rate = models.FloatField(null=False)
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+class DeviceSettings(models.Model):
+    language = models.CharField(choices=settings.LANGUAGES, max_length=2)
+    dayly_game_notifications_enabled = models.BooleanField(default=True)
+    weekly_game_notifications_enabled = models.BooleanField(default=True)
+    bonus_game_notifications_enabled = models.BooleanField(default=True)
+    apns_device = models.OneToOneField(to=APNSDevice, on_delete=models.deletion.CASCADE,
+                                    related_name='settings_apns_device', null=True)
+    gcm_device = models.OneToOneField(to=GCMDevice, on_delete=models.deletion.CASCADE,
+                                    related_name='settings_gcm_device', null=True)

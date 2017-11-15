@@ -2,6 +2,8 @@ from push_notifications.models import APNSDevice, GCMDevice
 from rest_framework import serializers
 from django.utils.translation import ugettext as _
 
+from backend.models import DeviceSettings
+
 
 class DeviceOS:
     IOS = 10
@@ -23,16 +25,13 @@ class DummyDeviceObject(object):
 
 class CreateDeviceSerializer(serializers.Serializer):
 
-    os    = serializers.ChoiceField(choices=DeviceOS.CHOICES)
+    os = serializers.ChoiceField(choices=DeviceOS.CHOICES)
     token = serializers.CharField()
 
     def create(self, validated_data):
         device_data = {
             'registration_id': validated_data.get('token', None)
         }
-
-        if int(validated_data.get('os', '')) not in DeviceOS.LIST:
-            raise AttributeError(('Invalid value "%s" of os field') % (validated_data.get('os')))
 
         if validated_data.get('os') == 10:
             APNSDevice.objects.get_or_create(**device_data)
@@ -44,3 +43,39 @@ class CreateDeviceSerializer(serializers.Serializer):
         instance = DummyDeviceObject(**device_data)
 
         return instance
+
+
+class CreateDeviceWithSettingsSerializer(serializers.ModelSerializer):
+    os = serializers.ChoiceField(choices=DeviceOS.CHOICES, write_only=True)
+    token = serializers.CharField(write_only=True)
+
+    # def to_representation(self, instance):
+    #     super(CreateDeviceWithSettingsSerializer, self).to_representation(instance)
+
+    def create(self, validated_data):
+        create_data = validated_data.copy()
+
+        device_data = {
+            'registration_id': create_data.pop('token', None)
+        }
+        os = create_data.pop('os', None)
+        model_cls = self.Meta.model
+
+        if os == 10:
+            (device, device_is_created) = APNSDevice.objects.get_or_create(**device_data)
+            create_data['apns_device'] = device
+            (settings, settings_is_created) = model_cls.objects.update_or_create(defaults=create_data,
+                                                          apns_device__registration_id=device.registration_id)
+        else:
+            device_data['cloud_message_type'] = 'FCM'
+            (device, is_created) = GCMDevice.objects.get_or_create(**device_data)
+            create_data['gcm_device'] = device
+            (settings, settings_is_created) = model_cls.objects.update_or_create(defaults=create_data,
+                                                          gcm_device__registration_id=device.registration_id)
+
+        return settings
+
+    class Meta:
+        model = DeviceSettings
+        fields = ('os', 'token', 'language', 'dayly_game_notifications_enabled', 'weekly_game_notifications_enabled',
+                  'bonus_game_notifications_enabled')

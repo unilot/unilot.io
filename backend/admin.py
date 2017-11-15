@@ -24,5 +24,5 @@ add_bet_tracking.short_description = _('Add bet tracking to models')
 class GameAdmin(admin.ModelAdmin):
     actions = [add_bet_tracking]
 
-admin.site.register((models.UserTelegram, models.ExchangeRate))
+admin.site.register((models.UserTelegram, models.ExchangeRate, models.DeviceSettings))
 admin.site.register(models.Game, GameAdmin)

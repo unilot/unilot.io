@@ -26,16 +26,25 @@ class PushAction():
 
 
 class GameAsPayloadMixin():
-    def __message_init__(self, *args, **kwargs):
+    __game__ = None
+
+    def get_game(self):
+        return self.__game__
+
+    def __set_game(self, game):
         from backend.models import Game
-        from backend.serializers.game import PublicGameSerializer
 
-        payload = kwargs.pop('payload', None)
-
-        if not isinstance(payload, Game):
+        if not isinstance(game, Game):
             raise AttributeError('payload should be instance of Game model')
 
-        serializer = PublicGameSerializer(payload)
+        self.__game__ = game
+
+    def __message_init__(self, *args, **kwargs):
+        from backend.serializers.game import PublicGameSerializer
+
+        self.__set_game(kwargs.pop('payload', None))
+
+        serializer = PublicGameSerializer(self.get_game())
 
         data = kwargs.get('data', {})
 
@@ -45,6 +54,46 @@ class GameAsPayloadMixin():
         kwargs['data'] = data
 
         return (args, kwargs)
+
+    def is_matching_settings(self, settings):
+        """
+        :param settings:
+        :type backend.models.DeviceSettings:
+        """
+        from backend.models import Game
+
+
+        result = True
+        game = self.get_game()
+
+        if not settings.dayly_game_notifications_enabled and game.type == Game.TYPE_1_DAY:
+            result = False
+        elif not settings.weekly_game_notifications_enabled and game.type == Game.TYPE_7_DAYS:
+            result = False
+        elif not settings.bonus_game_notifications_enabled and game.type == Game.TYPE_30_DAYS:
+            result = False
+
+        return (result and super(GameAsPayloadMixin, self).is_matching_settings(settings))
+
+    def get_required_settings(self):
+        from backend.models import Game
+
+        settings = {}
+        game = self.get_game()
+
+        if game.type == Game.TYPE_1_DAY:
+            settings['dayly_game_notifications_enabled'] = True
+        elif game.type == Game.TYPE_7_DAYS:
+            settings['weekly_game_notifications_enabled'] = True
+        elif game.type == Game.TYPE_30_DAYS:
+            settings['bonus_game_notifications_enabled'] = True
+
+        parent_result = {}
+
+        if hasattr(super(GameAsPayloadMixin, self), 'get_required_settings'):
+            parent_result = super(GameAsPayloadMixin, self).get_required_settings()
+
+        return {**settings, **parent_result}
 
 
 class PushMessage(serializers.Serializer):
@@ -79,6 +128,19 @@ class PushMessage(serializers.Serializer):
 
     def get_action(self, *args, **kwargs):
         raise NotImplementedError()
+
+    def is_matching_settings(self, settings):
+        return True
+
+    def get_required_settings(self):
+        settings = {}
+
+        parent_result = {}
+
+        if hasattr(super(PushMessage, self), 'get_required_settings'):
+            parent_result = super(PushMessage, self).get_required_settings()
+
+        return {**settings, **parent_result}
 
 
 class GameUpdatedPushMessage(GameAsPayloadMixin, PushMessage):
