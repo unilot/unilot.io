@@ -19,7 +19,6 @@ VERSION = '1.0.8'
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -33,11 +32,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'hvad',
     'push_notifications',
     'django_telegrambot',
     'oauth2_provider',
     'rest_framework',
-    'backend.apps.BackendConfig'
+    'backend.apps.BackendConfig',
+    'martor',
 ]
 
 MIDDLEWARE = [
@@ -89,6 +90,39 @@ OAUTH2_PROVIDER = {
     'DEFAULT_SCOPES': ['read'],
     'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore'
 }
+
+# Global martor settings
+# Input: string boolean, `true/false`
+MARTOR_ENABLE_CONFIGS = {
+    'jquery': 'true',    # to include/revoke jquery (require for admin default django)
+}
+
+# Safe Mode
+MARTOR_MARKDOWN_SAFE_MODE = True
+
+# Markdownify
+MARTOR_MARKDOWNIFY_FUNCTION = 'martor.utils.markdownify'
+MARTOR_MARKDOWNIFY_URL = '/martor/markdownify/'
+
+# Markdown extensions (default)
+MARTOR_MARKDOWN_EXTENSIONS = [
+    'markdown.extensions.extra',
+    'markdown.extensions.nl2br',
+    'markdown.extensions.smarty',
+    'markdown.extensions.fenced_code',
+
+    # Custom markdown extensions.
+    'martor.extensions.urlize',
+    'martor.extensions.del_ins', # ~~strikethrough~~ and ++underscores++
+    'martor.extensions.emoji',   # require for emoji
+]
+
+# Markdown urls
+MARTOR_UPLOAD_URL = '/martor/uploader/' # default
+
+# Markdown Extensions
+MARTOR_MARKDOWN_BASE_EMOJI_URL = 'https://assets-cdn.github.com/images/icons/emoji/' # default
+
 
 WSGI_APPLICATION = 'sportloto.wsgi.application'
 

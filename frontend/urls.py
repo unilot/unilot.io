@@ -1,7 +1,8 @@
 from django.conf.urls import url
-from frontend.views import SubscribeView
+from frontend import views
 
 
 urlpatterns = (
-    url(r'^$', SubscribeView.as_view(), name='index'),
+    url(r'^$', views.SubscribeView.as_view(), name='index'),
+    url(r'^mobile/faq(|/)$', views.MobileFAQListView.as_view(), name='mobile_faq'),
 )

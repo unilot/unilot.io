@@ -1,9 +1,9 @@
-from pprint import pprint
-
 from django.utils.translation import ugettext as _
 from django.views.generic.edit import FormView
+from django.views.generic.list import ListView
 from frontend.forms import SubscribeForm
 from frontend.utils.mailchimp import AppMailchimp
+from backend import models
 
 
 class SubscribeView(FormView):
@@ -27,3 +27,8 @@ class SubscribeView(FormView):
             form.add_error('email', _('Subscription failed. Email might already exist in database.'))
             return self.form_invalid(form)
 
+
+# Mobile views
+class MobileFAQListView(ListView):
+    model = models.FAQ
+    template_name = 'mobile/faq.html'

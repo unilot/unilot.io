@@ -158,3 +158,9 @@ msgstr "Игра окончена!"
 
 msgid "New Game Started!"
 msgstr "Началась новая игра!"
+
+msgid "Home page"
+msgstr "Главная"
+
+msgid "FAQ"
+msgstr "ЧаВо"

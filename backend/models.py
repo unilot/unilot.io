@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext as _
+from martor.models import MartorField
 from push_notifications.models import APNSDevice, GCMDevice
 from web3.contract import Contract
 from web3.main import Web3
@@ -13,6 +14,7 @@ from backend.utils.push import PushHelper
 from ethereum.utils.web3 import AppWeb3, ContractHelper, AccountHelper
 from web3.utils.compat import socket
 from sportloto import settings
+from hvad.models import TranslatableModel, TranslatedFields
 
 
 class Game(models.Model):
@@ -346,3 +348,14 @@ class DeviceSettings(models.Model):
                                     related_name='settings_apns_device', null=True)
     gcm_device = models.OneToOneField(to=GCMDevice, on_delete=models.deletion.CASCADE,
                                     related_name='settings_gcm_device', null=True)
+
+
+class FAQ(TranslatableModel):
+    translations = TranslatedFields(
+        question=models.CharField(max_length=255, null=False),
+        answer = MartorField(null=False)
+    )
+
+    @property
+    def question_(self):
+        return self.question
