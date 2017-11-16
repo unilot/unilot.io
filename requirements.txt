@@ -10,6 +10,7 @@ cryptography==2.1.1
 cytoolz==0.8.2
 Django==1.11.4
 django-filter==1.0.4
+django-hvad==1.8.0
 django-oauth-toolkit==1.0.0
 django-push-notifications==1.5.0
 django-rest-swagger==2.1.2
@@ -33,6 +34,7 @@ Jinja2==2.9.6
 mailchimp3==2.0.18
 Markdown==2.6.8
 MarkupSafe==1.0
+martor==1.2.4
 oauthlib==2.0.2
 openapi-codec==1.3.2
 pkg-resources==0.0.0

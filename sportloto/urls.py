@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^o2/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     url(r'^tg/', include('django_telegrambot.urls')),
+    url(r'^martor/', include('martor.urls'))
 ]
 
 urlpatterns += i18n_patterns(
