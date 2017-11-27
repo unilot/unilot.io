@@ -3,7 +3,7 @@ from collections import OrderedDict
 from rest_framework import serializers
 from django.utils.translation import activate, ugettext as _
 
-from sportloto.settings import LANGUAGES
+from unilot.settings import LANGUAGES
 
 
 class PushAction():

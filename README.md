@@ -1,4 +1,4 @@
-# Sportloto
+# Unilot
 
 Simple lottery based on ethereum smart contracts.
 
@@ -8,31 +8,31 @@ Simple lottery based on ethereum smart contracts.
 
 ```
 cd ~/apps/
-virtualenv -p /usr/bin/python3.5 sportloto
+virtualenv -p /usr/bin/python3.5 unilot
 ```
 
 2. Activate environment settings (see [virtualenv docs](https://virtualenv.pypa.io/en/stable/) for more info)
 
 ```
-source ~/apps/sportloto/bin/activate
+source ~/apps/unilot/bin/activate
 ```
 
 3. Pull code from repo
 
 ```
-git pull https://github.com/Alegzander/blockchain-sport-loto-prototype-backend app
+git pull https://github.com/unilot/unilot.io app
 ```
 
-Result of this command will be pulled code located in `~/apps/sportloto/app`
+Result of this command will be pulled code located in `~/apps/unilot/app`
 
 4. Now configure
 
-Go to app dir (`~/apps/sportloto/app`)
+Go to app dir (`~/apps/unilot/app`)
 
 Copy example settings file and setup required settings.
 
 ```
-cp sportloto/settings.py.example sportloto/settings.py
+cp unilot/local_settings.py.example unilot/local_settings.py
 ```
 
 For simple app start you can just setup `secret key` and `database`.
@@ -96,7 +96,7 @@ Node will connect to test network and make fast sycnronization
 (for details see
 [docs](https://github.com/ethereum/go-ethereum/wiki/geth)).
 
-In this example in only api required to operate `sportloto` was enabled.
+In this example in only api required to operate `unilot` was enabled.
 
 ```
 geth --rinkeby --fast --cache 1024 --rpc --rpcaddr 127.0.0.1 --rpcapi "eth,personal,web3,net" --ipcpath /home/ethereum/.ethereum/geth.ipc console
