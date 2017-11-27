@@ -1,6 +1,6 @@
 from django.db.models.query_utils import Q
 from push_notifications.models import GCMDevice, APNSDevice
-from sportloto import settings
+from unilot import settings
 
 
 class PushHelper:

@@ -1,4 +1,4 @@
-from sportloto.settings import WEB3_CONFIG
+from unilot.settings import WEB3_CONFIG
 from web3 import Web3, KeepAliveRPCProvider, IPCProvider
 from django.utils.translation import ugettext as _
 from os import path

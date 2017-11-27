@@ -13,7 +13,7 @@ from backend.serializers import push
 from backend.utils.push import PushHelper
 from ethereum.utils.web3 import AppWeb3, ContractHelper, AccountHelper
 from web3.utils.compat import socket
-from sportloto import settings
+from unilot import settings
 from hvad.models import TranslatableModel, TranslatedFields
 
 

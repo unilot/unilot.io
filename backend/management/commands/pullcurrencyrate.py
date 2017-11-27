@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from coinbase.wallet.client import Client
-from sportloto.settings import COINBASE_CONFIG
+from unilot.settings import COINBASE_CONFIG
 from backend.models import ExchangeRate
 
 

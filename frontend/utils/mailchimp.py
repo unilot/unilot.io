@@ -1,4 +1,4 @@
-from sportloto import settings
+from unilot import settings
 from mailchimp3 import MailChimp
 
 

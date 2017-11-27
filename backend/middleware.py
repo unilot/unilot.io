@@ -3,7 +3,7 @@ from rest_framework import status
 import semantic_version as sv
 
 
-from sportloto import settings
+from unilot import settings
 
 
 class ApiVersionControlMiddleware(object):

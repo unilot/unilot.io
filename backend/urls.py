@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from backend.views import games, devices
-from sportloto.settings import DEBUG
+from unilot.settings import DEBUG
 
 urlpatterns = [
     url(r'^games(|/)$', games.GamesView.as_view(), name='games'),
