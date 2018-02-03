@@ -27,6 +27,7 @@ class Game(models.Model):
     TYPE_1_DAY   = 10
     TYPE_7_DAYS  = 30
     TYPE_30_DAYS = 50
+    TOKEN_GAME = 70
 
     STATUS_LIST = (
         (STATUS_NEW, _('New')),
@@ -40,12 +41,8 @@ class Game(models.Model):
         (TYPE_1_DAY, _('1 day')),
         (TYPE_7_DAYS, _('7 days')),
         (TYPE_30_DAYS, _('30 days')),
+        (TOKEN_GAME, _('Token game')),
     )
-
-    TYPE_BET_MAP = {
-        TYPE_1_DAY: 0.05,
-        TYPE_7_DAYS: 0.05,
-    }
 
     CONTRACT_STATUS_MAP = {
         '0': STATUS_PUBLISHED,
