@@ -115,8 +115,11 @@ class PublicGameSerializer(serializers.ModelSerializer, FiatExchangeCalculatorMi
 class GameWinner(serializers.Serializer, FiatExchangeCalculatorMixin):
     address = serializers.CharField()
     position = serializers.IntegerField()
-    prize_amount = serializers.FloatField()
-    prize_amount_fiat = serializers.SerializerMethodField(method_name='convert_amount_to_fiat')
+    prize_amount = serializers.DictField()
+    prize_amount_fiat = serializers.SerializerMethodField()
+
+    def get_prize_amount_fiat(self, obj):
+        return self.convert_amount_to_fiat(obj.get('prize_amount', {'amount':0}), 'amount')
 
 
 class GameDebugPush(serializers.Serializer):
