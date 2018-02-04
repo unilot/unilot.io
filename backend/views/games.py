@@ -41,7 +41,10 @@ class GamePrizesView(generics.RetrieveAPIView):
                 prize_data.append({
                     'address': '0x0000000000000000000000000000000000000000',
                     'position': i,
-                    'prize_amount': Web3.fromWei(prize, 'ether')
+                    'prize_amount': {
+                        'amount': Web3.fromWei(prize, 'ether'),
+                        'currency': 'ETH'
+                    }
                 })
 
                 i += 1
@@ -53,7 +56,10 @@ class GamePrizesView(generics.RetrieveAPIView):
                 prize_data.append({
                     'address': address,
                     'position': i,
-                    'prize_amount': prize
+                    'prize_amount': {
+                        'amount': prize,
+                        'currency': 'ETH'
+                    }
                 })
 
                 i += 1
