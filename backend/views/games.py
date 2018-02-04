@@ -108,3 +108,15 @@ class GameDebugPushView(generics.CreateAPIView):
         headers = self.get_success_headers(serializer.data)
 
         return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
+
+
+class BonusGamePlayersListView(generics.RetrieveAPIView):
+    permission_classes = [ TokenHasScope ]
+    required_scopes = ['read']
+    queryset = Game.objects.filter(type__in=(Game.TYPE_30_DAYS, Game.TOKEN_GAME,))
+
+    def get(self, request, *args, **kwargs):
+        game = self.get_object() #Throws 404 on none-existing game
+
+
+        return Response([], status=status.HTTP_200_OK)
