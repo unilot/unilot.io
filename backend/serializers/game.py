@@ -42,11 +42,11 @@ class PublicGameSerializer(serializers.ModelSerializer, FiatExchangeCalculatorMi
     :type dict:
     """
 
-    def get_gas_price(self, *args, **kwargs):
-        return Web3.toWei(10, 'gwei')
+    def get_gas_price(self, obj):
+        return 0 if obj.type in (Game.TYPE_30_DAYS, Game.TOKEN_GAME) else Web3.toWei(10, 'gwei')
 
-    def get_gas_limit(self, *args, **kwargs):
-        return 120000
+    def get_gas_limit(self, obj):
+        return 0 if obj.type in (Game.TYPE_30_DAYS, Game.TOKEN_GAME) else 120000
 
     prize_amount_fiat = serializers.SerializerMethodField(read_only=True)
     bet_amount = serializers.SerializerMethodField(read_only=True)
