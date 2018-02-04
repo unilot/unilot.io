@@ -42,10 +42,18 @@ class PublicGameSerializer(serializers.ModelSerializer, FiatExchangeCalculatorMi
     :type dict:
     """
 
-    prize_amount_fiat = serializers.SerializerMethodField()
-    bet_amount_fiat = serializers.SerializerMethodField()
-    num_players = serializers.SerializerMethodField()
-    prize_amount = serializers.SerializerMethodField()
+    def get_gas_price(self, *args, **kwargs):
+        return Web3.toWei(10, 'gwei')
+
+    def get_gas_limit(self, *args, **kwargs):
+        return 120000
+
+    prize_amount_fiat = serializers.SerializerMethodField(read_only=True)
+    bet_amount_fiat = serializers.SerializerMethodField(read_only=True)
+    num_players = serializers.SerializerMethodField(read_only=True)
+    prize_amount = serializers.SerializerMethodField(read_only=True)
+    gas_price = serializers.SerializerMethodField(read_only=True)
+    gas_limit = serializers.SerializerMethodField(read_only=True)
 
     def __get_stat__(self, game):
         key = 'g%d' % (game.id)
@@ -90,7 +98,8 @@ class PublicGameSerializer(serializers.ModelSerializer, FiatExchangeCalculatorMi
 
     class Meta:
         model = Game
-        fields = ('id', 'status', 'type', 'smart_contract_id', 'prize_amount', 'prize_amount_fiat', 'num_players', 'bet_amount', 'bet_amount_fiat', 'started_at', 'ending_at')
+        fields = ('id', 'status', 'type', 'smart_contract_id', 'prize_amount', 'prize_amount_fiat', 'num_players',
+                  'bet_amount', 'bet_amount_fiat', 'gas_price', 'gas_limit', 'started_at', 'ending_at',)
 
 
 class GameWinner(serializers.Serializer, FiatExchangeCalculatorMixin):
