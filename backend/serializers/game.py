@@ -49,6 +49,7 @@ class PublicGameSerializer(serializers.ModelSerializer, FiatExchangeCalculatorMi
         return 120000
 
     prize_amount_fiat = serializers.SerializerMethodField(read_only=True)
+    bet_amount = serializers.SerializerMethodField(read_only=True)
     bet_amount_fiat = serializers.SerializerMethodField(read_only=True)
     num_players = serializers.SerializerMethodField(read_only=True)
     prize_amount = serializers.SerializerMethodField(read_only=True)
@@ -88,13 +89,22 @@ class PublicGameSerializer(serializers.ModelSerializer, FiatExchangeCalculatorMi
         else:
             result = float(getattr(obj, 'prize_amount'))
 
-        return float(result)
+        return {
+            'amount': float(result),
+            'currency': 'UNIT' if obj.type == Game.TOKEN_GAME else 'ETH'
+        }
 
     def get_prize_amount_fiat(self, obj):
-        return self.calculate_fiat_amount(self.get_prize_amount(obj))
+        return self.calculate_fiat_amount(self.get_prize_amount(obj).get('amount', 0))
 
     def get_bet_amount_fiat(self, obj):
         return self.convert_amount_to_fiat(obj, attribute_name='bet_amount')
+
+    def get_bet_amount(self, obj):
+        return {
+            'amount': 0 if obj.type in (Game.TOKEN_GAME, Game.TYPE_30_DAYS) else obj.bet_amount,
+            'currency': 'ETH'
+        }
 
     class Meta:
         model = Game
