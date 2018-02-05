@@ -23,7 +23,8 @@ class Command(BaseCommand):
                                         ending_at__gt=timezone.now()).all()
 
             for game in games:
-                if game.smart_contract_id in (None, '', '0'):
+
+                if not Web3.isAddress(game.smart_contract_id):
                     continue
 
                 logger.info('Processing game %d' % (game.id))
