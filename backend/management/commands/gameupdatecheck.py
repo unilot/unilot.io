@@ -74,11 +74,13 @@ class Command(BaseCommand):
                     .exclude(status__in=(Game.STATUS_CANCELED,), type__in=(Game.TYPE_30_DAYS, Game.TOKEN_GAME,))\
                     .filter(started_at__gte=game.started_at, ending_at__lte=game.ending_at).all()
 
-                game.prize_amount = 0
+                if game.type != Game.TOKEN_GAME:
+                    game.prize_amount = 0
                 game.num_players = 0
 
                 for child_game in child_games:
-                    game.prize_amount += child_game.prize_amount
+                    if game.type != Game.TOKEN_GAME:
+                        game.prize_amount += child_game.prize_amount
                     game.num_players += child_game.num_players
 
                 game.save()
