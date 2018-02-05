@@ -90,7 +90,12 @@ class PublicGameSerializer(serializers.ModelSerializer, FiatExchangeCalculatorMi
         }
 
     def get_prize_amount_fiat(self, obj):
-        return self.calculate_fiat_amount(self.get_prize_amount(obj).get('amount', 0))
+        amount = self.get_prize_amount(obj).get('amount', 0)
+
+        if obj.type == Game.TOKEN_GAME:
+            amount *= 0.000079
+
+        return self.calculate_fiat_amount(amount)
 
     def get_bet_amount_fiat(self, obj):
         return self.convert_amount_to_fiat(obj, attribute_name='bet_amount')
