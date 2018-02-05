@@ -12,9 +12,14 @@ class Command(BaseCommand):
     help = 'Finishes game'
     CONTRACT_NAME = 'UnilotPrizeCalculator'
 
+    def add_arguments(self, parser):
+        parser.add_argument('game_id')
+        parser.add_argument('game_type')
+
     def handle(self, *args, **options):
-        game_id = args[1]
-        push_type = args[2]
+        game_id = options.get('game_id')
+        push_type = options.get('game_type')
+        
         try:
             game = Game.objects.get(id=game_id)
 
