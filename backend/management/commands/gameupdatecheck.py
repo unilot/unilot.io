@@ -18,6 +18,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             games = Game.objects.filter(status=Game.STATUS_PUBLISHED,
+                                        type__in=(Game.TYPE_1_DAY, Game.TYPE_7_DAYS,),
                                         started_at__lte=timezone.now(),
                                         ending_at__gt=timezone.now()).all()
 
@@ -61,3 +62,26 @@ class Command(BaseCommand):
             message = 'No games to proceed'
             logger.error(message)
             print(message)
+
+        try:
+            games = Game.objects.filter(status=Game.STATUS_PUBLISHED,
+                                        type__in=(Game.TYPE_30_DAYS, Game.TOKEN_GAME,),
+                                        started_at__lte=timezone.now(),
+                                        ending_at__gt=timezone.now()).all()
+
+            for game in games:
+                child_games = Game.objects\
+                    .exclude(status__in=(Game.STATUS_CANCELED,), type__in=(Game.TYPE_30_DAYS, Game.TOKEN_GAME,))\
+                    .filter(started_at__gte=game.started_at, ending_at__lte=game.ending_at).all()
+
+                game.prize_amount = 0
+                game.num_players = 0
+
+                for child_game in child_games:
+                    game.prize_amount += child_game.prize_amount
+                    game.num_players += child_game.num_players
+
+                game.save()
+
+        except Game.DoesNotExist:
+            pass
