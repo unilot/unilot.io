@@ -43,7 +43,7 @@ class PublicGameSerializer(serializers.ModelSerializer, FiatExchangeCalculatorMi
     """
 
     def get_gas_price(self, obj):
-        return 0 if obj.type in (Game.TYPE_30_DAYS, Game.TOKEN_GAME) else Web3.toWei(10, 'gwei')
+        return 0 if obj.type in (Game.TYPE_30_DAYS, Game.TOKEN_GAME) else 10
 
     def get_gas_limit(self, obj):
         return 0 if obj.type in (Game.TYPE_30_DAYS, Game.TOKEN_GAME) else 120000
