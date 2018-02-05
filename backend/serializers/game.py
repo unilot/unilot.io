@@ -76,17 +76,12 @@ class PublicGameSerializer(serializers.ModelSerializer, FiatExchangeCalculatorMi
         return int(stat.get('numPlayers', getattr(obj, 'num_players')))
 
     def get_prize_amount(self, obj):
-        stat = self.__get_stat__(obj)
         result = 0
 
         try:
-            result = stat.get('prizeAmount')
+            stat = self.__get_stat__(obj)
+            result = Web3.fromWei(stat.get('prizeAmount'), 'ether')
         except:
-            pass
-
-        if result is not None and result > 0:
-            result = Web3.fromWei(result, 'ether')
-        else:
             result = float(getattr(obj, 'prize_amount'))
 
         return {
