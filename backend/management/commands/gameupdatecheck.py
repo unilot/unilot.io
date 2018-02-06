@@ -73,7 +73,7 @@ class Command(BaseCommand):
             for game in games:
                 child_games = Game.objects\
                     .exclude(status__in=(Game.STATUS_CANCELED,), type__in=(Game.TYPE_30_DAYS, Game.TOKEN_GAME,))\
-                    .filter(started_at__gte=game.started_at, ending_at__lte=game.ending_at).all()
+                    .filter(started_at__gte=game.started_at, ending_at__lte=game.ending_at)
 
                 if game.type != Game.TOKEN_GAME:
                     game.prize_amount = 0
@@ -81,7 +81,7 @@ class Command(BaseCommand):
 
                 for child_game in child_games:
                     if game.type != Game.TOKEN_GAME:
-                        game.prize_amount += child_game.prize_amount
+                        game.prize_amount += ( (child_game.prize_amount / 0.7) * 0.1 )
                     game.num_players += child_game.num_players
 
                 game.save()
