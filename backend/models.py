@@ -155,7 +155,7 @@ class Game(models.Model):
             args=[web3.toWei(self.bet_amount, 'ether'), ContractHelper.getCalculatorContractAddress()])
 
     def finish(self):
-        if self.smart_contract_id in (None, '0'):
+        if not Web3.isAddress(self.smart_contract_id):
             raise AttributeError('Invalid smart contract address')
 
         if self.status != Game.STATUS_PUBLISHED:
@@ -205,7 +205,7 @@ class Game(models.Model):
         return tx
 
     def revoke(self):
-        if self.smart_contract_id in (None, '0'):
+        if not Web3.isAddress(self.smart_contract_id):
             raise AttributeError('Invalid smart contract address')
 
         if self.status != Game.STATUS_PUBLISHED:
@@ -278,8 +278,8 @@ class Game(models.Model):
         :rtype: list
         """
 
-        if self.smart_contract_id in (None, '0'):
-            raise AttributeError('Smart contract id can not be empty')
+        if not Web3.isAddress(self.smart_contract_id):
+            return []
 
         contract = self.get_smart_contract()
 
