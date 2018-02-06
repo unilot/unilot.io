@@ -72,7 +72,8 @@ class Command(BaseCommand):
 
             for game in games:
                 child_games = Game.objects\
-                    .exclude(status__in=(Game.STATUS_CANCELED,), type__in=(Game.TYPE_30_DAYS, Game.TOKEN_GAME,))\
+                    .exclude(type__in=(Game.TYPE_30_DAYS, Game.TOKEN_GAME,))\
+                    .exclude(status__in=(Game.STATUS_CANCELED,))\
                     .filter(started_at__gte=game.started_at, ending_at__lte=game.ending_at)
 
                 if game.type != Game.TOKEN_GAME:
