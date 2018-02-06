@@ -78,4 +78,4 @@ class CreateDeviceWithSettingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = DeviceSettings
         fields = ('os', 'token', 'language', 'dayly_game_notifications_enabled', 'weekly_game_notifications_enabled',
-                  'bonus_game_notifications_enabled')
+                  'bonus_game_notifications_enabled', 'token_game_notifications_enabled')

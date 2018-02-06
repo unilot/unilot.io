@@ -341,6 +341,7 @@ class DeviceSettings(models.Model):
     dayly_game_notifications_enabled = models.BooleanField(default=True)
     weekly_game_notifications_enabled = models.BooleanField(default=True)
     bonus_game_notifications_enabled = models.BooleanField(default=True)
+    token_game_notifications_enabled = models.BooleanField(default=True)
     apns_device = models.OneToOneField(to=APNSDevice, on_delete=models.deletion.CASCADE,
                                     related_name='settings_apns_device', null=True)
     gcm_device = models.OneToOneField(to=GCMDevice, on_delete=models.deletion.CASCADE,
