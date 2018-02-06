@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from web3.main import Web3
 
-from backend.models import Game
+from backend.models import Game, GamePlayers
 from django.utils import timezone
 import logging
 
@@ -32,11 +32,15 @@ class Command(BaseCommand):
                 keep_trying = True
 
                 stat = {}
+                players = []
 
                 while keep_trying:
                     try:
                         stat = game.get_stat()
+                        players = game.get_players()
+
                         keep_trying = False
+
                         logger.info('Game %d: Pulling game stats.' % (game.id))
                         logger.debug('Game %d: Stat: %s' % (game.id, str(stat)))
                     except socket.timeout:
@@ -44,6 +48,11 @@ class Command(BaseCommand):
                         keep_trying = True
 
                 stat_num_players = stat.get('numPlayers', 0)
+
+                GamePlayers.objects.filter(id=game.id).delete()
+
+                for player in players:
+                    GamePlayers.objects.create(game_id=game.id, wallet=player)
 
                 logger.info('Game %d: Checking num players')
                 logger.debug('Game %d: Game num players: %d Stat num players: %d' %
@@ -78,12 +87,16 @@ class Command(BaseCommand):
 
                 if game.type != Game.TOKEN_GAME:
                     game.prize_amount = 0
-                game.num_players = 0
+                game.num_players = GamePlayers.objects \
+                    .values('wallet') \
+                    .distinct('wallet') \
+                    .exclude(game__type__in=(Game.TYPE_30_DAYS, Game.TOKEN_GAME,)) \
+                    .filter(game__started_at__gte=game.started_at, game__ending_at__lte=game.ending_at) \
+                    .count()
 
                 for child_game in child_games:
                     if game.type != Game.TOKEN_GAME:
                         game.prize_amount += ( (child_game.prize_amount / 0.7) * 0.1 )
-                    game.num_players += child_game.num_players
 
                 game.save()
 

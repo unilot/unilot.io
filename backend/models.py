@@ -15,6 +15,7 @@ from ethereum.utils.web3 import AppWeb3, ContractHelper, AccountHelper
 from web3.utils.compat import socket
 from unilot import settings
 from hvad.models import TranslatableModel, TranslatedFields
+from django.core.exceptions import ValidationError
 
 
 class Game(models.Model):
@@ -311,6 +312,21 @@ class Game(models.Model):
 
     def __str__(self):
         return '%d - %s' % (self.id, ( self.smart_contract_id if self.smart_contract_id else '%s in progress' % self.transaction_id ) )
+
+
+def wallet_validation(value):
+    if not Web3.isAddress(value):
+        raise ValidationError(_('Invalid wallet'))
+
+
+class GamePlayers(models.Model):
+    game = models.ForeignKey(Game, on_delete=models.deletion.CASCADE, related_name='game')
+    wallet = models.CharField(max_length=64, validators=[
+        wallet_validation
+    ])
+
+    def __str__(self):
+        return '%d:%s' % (self.game_id, self.wallet)
 
 
 class UserTelegram(models.Model):

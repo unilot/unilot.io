@@ -4,7 +4,7 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from web3.main import Web3
 
-from backend.models import Game
+from backend.models import Game, GamePlayers
 from backend.serializers.device import DeviceOS
 from backend.serializers.game import PublicGameSerializer, GameWinner, GameDebugPush
 from backend.utils.push import PushHelper
@@ -118,5 +118,10 @@ class BonusGamePlayersListView(generics.RetrieveAPIView):
     def get(self, request, *args, **kwargs):
         game = self.get_object() #Throws 404 on none-existing game
 
+        players = GamePlayers.objects\
+            .values('wallet')\
+            .distinct('wallet')\
+            .exclude(game__type__in=(Game.TYPE_30_DAYS, Game.TOKEN_GAME,))\
+            .filter(game__started_at__gte=game.started_at, game__ending_at__lte=game.ending_at)
 
-        return Response([], status=status.HTTP_200_OK)
+        return Response((player.get('wallet') for player in players), status=status.HTTP_200_OK)
