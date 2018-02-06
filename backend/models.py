@@ -228,8 +228,8 @@ class Game(models.Model):
         """
         :rtype: dict
         """
-        if self.smart_contract_id in (None, '0'):
-            raise AttributeError('Smart contract id can not be empty')
+        if not Web3.isAddress(self.smart_contract_id):
+            return []
 
         contract = self.get_smart_contract()
         winners, prizes = contract.call().getWinners()
