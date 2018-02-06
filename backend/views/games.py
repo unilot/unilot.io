@@ -124,4 +124,4 @@ class BonusGamePlayersListView(generics.RetrieveAPIView):
             .exclude(game__type__in=(Game.TYPE_30_DAYS, Game.TOKEN_GAME,))\
             .filter(game__started_at__gte=game.started_at, game__ending_at__lte=game.ending_at)
 
-        return Response((player.get('wallet') for player in players), status=status.HTTP_200_OK)
+        return Response(({'address': player.get('wallet')} for player in players), status=status.HTTP_200_OK)
