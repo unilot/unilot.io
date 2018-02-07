@@ -122,7 +122,7 @@ class GameWinner(serializers.Serializer, FiatExchangeCalculatorMixin):
         amount = obj.get('prize_amount', {'amount':0, 'currency': 'ETH'})
 
         if amount.get('currency') == 'UNIT':
-            amount['amount'] = amount.get('amount') * 0.000079
+            amount['amount'] = float(amount.get('amount')) * 0.000079
 
         return self.convert_amount_to_fiat(amount, 'amount')
 
