@@ -119,7 +119,12 @@ class GameWinner(serializers.Serializer, FiatExchangeCalculatorMixin):
     prize_amount_fiat = serializers.SerializerMethodField()
 
     def get_prize_amount_fiat(self, obj):
-        return self.convert_amount_to_fiat(obj.get('prize_amount', {'amount':0}), 'amount')
+        amount = obj.get('prize_amount', {'amount':0, 'currency': 'ETH'})
+
+        if amount.get('currency') == 'UNIT':
+            amount['amount'] = amount.get('amount') * 0.000079
+
+        return self.convert_amount_to_fiat(amount, 'amount')
 
 
 class GameDebugPush(serializers.Serializer):

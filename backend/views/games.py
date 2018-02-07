@@ -43,7 +43,7 @@ class GamePrizesView(generics.RetrieveAPIView):
                     'position': i,
                     'prize_amount': {
                         'amount': Web3.fromWei(prize, 'ether'),
-                        'currency': 'ETH'
+                        'currency': 'UNIT' if game.type in (Game.TOKEN_GAME,) else 'ETH'
                     }
                 })
 
@@ -58,7 +58,7 @@ class GamePrizesView(generics.RetrieveAPIView):
                     'position': i,
                     'prize_amount': {
                         'amount': prize,
-                        'currency': 'ETH'
+                        'currency': 'UNIT' if game.type in (Game.TOKEN_GAME,) else 'ETH'
                     }
                 })
 
