@@ -11,6 +11,7 @@ from web3.main import Web3
 
 from backend.serializers import push
 from backend.utils.push import PushHelper
+from ethereum.contracts.UnilotPrizeCalculator import UnilotPrizeCalculator
 from ethereum.utils.web3 import AppWeb3, ContractHelper, AccountHelper
 from web3.utils.compat import socket
 from unilot import settings
@@ -278,13 +279,18 @@ class Game(models.Model):
         """
         :rtype: list
         """
+        result = []
 
-        if not Web3.isAddress(self.smart_contract_id):
-            return []
+        if Web3.isAddress(self.smart_contract_id):
+            contract = self.get_smart_contract()
+            result = contract.call().calcaultePrizes()
+        else:
+            calculator = UnilotPrizeCalculator()
+            bet = Web3.toWei( ( ( self.prize_amount/self.num_players ) / 0.7 ), 'ether')
+            rawData = calculator.calculate_prizes(bet, self.num_players)
+            result = [ prize_amount for prize_amount in rawData if int(prize_amount) > 0 ]
 
-        contract = self.get_smart_contract()
-
-        return contract.call().calcaultePrizes()
+        return result
 
 
     def save(self, force_insert=False, force_update=False, using=None,
