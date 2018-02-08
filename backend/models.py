@@ -101,7 +101,7 @@ class Game(models.Model):
 
                 self.save()
 
-                push_message = push.GameUpdatedPushMessage(payload=self)
+                push_message = push.GameNewPlayerPushMessage(payload=self)
 
                 PushHelper.inform_all_devices(push_message)
 
@@ -169,7 +169,7 @@ class Game(models.Model):
             self.ending_at += timezone.timedelta(hours=24)
             self.save()
 
-            push_message = push.GameUpdatedPushMessage(payload=self)
+            push_message = push.GameExtendedPushMessage(payload=self)
 
             PushHelper.inform_all_devices(push_message)
 

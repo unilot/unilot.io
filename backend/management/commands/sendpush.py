@@ -11,8 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
-    help = 'Finishes game'
-    CONTRACT_NAME = 'UnilotPrizeCalculator'
+    help = 'Send push for game'
 
     def add_arguments(self, parser):
         parser.add_argument('game_id')
@@ -31,7 +30,7 @@ class Command(BaseCommand):
             if push_type == 'game_started':
                 push_message = push.GameStartedPushMessage(payload=game)
             elif push_type == 'game_updated':
-                push_message = push.GameUpdatedPushMessage(payload=game)
+                push_message = push.GameNewPlayerPushMessage(payload=game)
 
             if push_message:
                 if device_token and GCMDevice.objects.filter(registration_id=device_token).exists():

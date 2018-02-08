@@ -65,7 +65,7 @@ class Command(BaseCommand):
                     game.save()
 
                     logger.info('Game %d: Sending notification to debices' % (game.id))
-                    push_message = push.GameUpdatedPushMessage(payload=game)
+                    push_message = push.GameNewPlayerPushMessage(payload=game)
                     PushHelper.inform_all_devices(push_message)
 
         except Game.DoesNotExist:

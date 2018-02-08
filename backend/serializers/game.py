@@ -43,10 +43,10 @@ class PublicGameSerializer(serializers.ModelSerializer, FiatExchangeCalculatorMi
     """
 
     def get_gas_price(self, obj):
-        return 0 if obj.type in (Game.TYPE_30_DAYS, Game.TOKEN_GAME) else 10
+        return 0 if obj.type in (Game.TYPE_30_DAYS, Game.TOKEN_GAME) else 2
 
     def get_gas_limit(self, obj):
-        return 0 if obj.type in (Game.TYPE_30_DAYS, Game.TOKEN_GAME) else 120000
+        return 0 if obj.type in (Game.TYPE_30_DAYS, Game.TOKEN_GAME) else 90000
 
     prize_amount_fiat = serializers.SerializerMethodField(read_only=True)
     bet_amount = serializers.SerializerMethodField(read_only=True)

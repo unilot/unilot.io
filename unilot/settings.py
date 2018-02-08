@@ -155,7 +155,8 @@ LANGUAGES = (
 )
 
 LOCALE_PATHS = [
-    os.path.join(BASE_DIR, 'frontend', 'locale')
+    os.path.join(BASE_DIR, 'frontend', 'locale'),
+    os.path.join(BASE_DIR, 'backend', 'locale')
 ]
 
 TIME_ZONE = 'UTC'
