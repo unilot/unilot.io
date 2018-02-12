@@ -125,3 +125,29 @@ class BonusGamePlayersListView(generics.RetrieveAPIView):
             .filter(game__started_at__gte=game.started_at, game__ending_at__lte=game.ending_at)
 
         return Response(({'address': player.get('wallet')} for player in players), status=status.HTTP_200_OK)
+
+
+class CheckParticipation(generics.GenericAPIView):
+    permission_classes = (TokenHasScope,)
+    required_scopes = ('read',)
+
+    def get(self, request, *args, **kwargs):
+        players = GamePlayers.objects\
+            .distinct('game_id', 'wallet')\
+            .filter(wallet__in=request.GET.getlist(key='wallets'))\
+            .filter(game__status=Game.STATUS_PUBLISHED)
+
+        result = []
+        result_map = {}
+
+        for player in players:
+            if not player.wallet in result_map.keys():
+                result_map[player.wallet] = len(result)
+                result.append({
+                    'wallet': player.wallet,
+                    'games': [player.game_id]
+                })
+            else:
+                result[result_map[player.wallet]]['games'].append(player.game_id)
+
+        return Response(result, status=status.HTTP_200_OK)
