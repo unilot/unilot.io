@@ -147,17 +147,45 @@ class GameUpdatedPushMessage(GameAsPayloadMixin, PushMessage):
 
     @staticmethod
     def message_text():
-        return 'Game updated!'
+        return _('New participant has replenished jackpot!')
 
     def get_action(self, *args, **kwargs):
         return PushAction.GAME_UPDATED
+
+
+class GameNewPlayerPushMessage(GameAsPayloadMixin, PushMessage):
+
+    @staticmethod
+    def message_text():
+        return _('New participant has replenished jackpot!')
+
+    def get_action(self, *args, **kwargs):
+        return PushAction.GAME_UPDATED
+
+
+class GameExtendedPushMessage(GameAsPayloadMixin, PushMessage):
+    @staticmethod
+    def message_text():
+        return _('The drawing is postponed. Number of participants is small:(')
+
+    def get_action(self, *args, **kwargs):
+        return PushAction.GAME_UPDATED
+
+
+class GameCancelledPushMessage(GameAsPayloadMixin, PushMessage):
+    @staticmethod
+    def message_text():
+        return _('The drawing is canceled.')
+
+    def get_action(self, *args, **kwargs):
+        return PushAction.GAME_CANCELED
 
 
 class GameUnpublishedPushMessage(GameAsPayloadMixin, PushMessage):
 
     @staticmethod
     def message_text():
-        return 'Choice of winner started!'
+        return _('Ladies and gentlemen, bets are made! The winners are choosing.')
 
     def get_action(self, *args, **kwargs):
         return PushAction.GAME_UNPUBLISHED
@@ -190,7 +218,7 @@ class GameFinishedPushMessage(PushMessage):
 
     @staticmethod
     def message_text():
-        return 'Game finished!'
+        return _('The drawing is over!')
 
     def get_action(self, *args, **kwargs):
         return PushAction.GAME_FINISHED
@@ -199,7 +227,7 @@ class GameFinishedPushMessage(PushMessage):
 class GameStartedPushMessage(GameAsPayloadMixin, PushMessage):
     @staticmethod
     def message_text():
-        return 'New Game Started!'
+        return _('New drawing has started. Join it!')
 
     def get_action(self, *args, **kwargs):
         return PushAction.GAME_STARTED

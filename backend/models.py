@@ -11,10 +11,12 @@ from web3.main import Web3
 
 from backend.serializers import push
 from backend.utils.push import PushHelper
+from ethereum.contracts.UnilotPrizeCalculator import UnilotPrizeCalculator
 from ethereum.utils.web3 import AppWeb3, ContractHelper, AccountHelper
 from web3.utils.compat import socket
 from unilot import settings
 from hvad.models import TranslatableModel, TranslatedFields
+from django.core.exceptions import ValidationError
 
 
 class Game(models.Model):
@@ -99,7 +101,7 @@ class Game(models.Model):
 
                 self.save()
 
-                push_message = push.GameUpdatedPushMessage(payload=self)
+                push_message = push.GameNewPlayerPushMessage(payload=self)
 
                 PushHelper.inform_all_devices(push_message)
 
@@ -155,7 +157,7 @@ class Game(models.Model):
             args=[web3.toWei(self.bet_amount, 'ether'), ContractHelper.getCalculatorContractAddress()])
 
     def finish(self):
-        if self.smart_contract_id in (None, '0'):
+        if not Web3.isAddress(self.smart_contract_id):
             raise AttributeError('Invalid smart contract address')
 
         if self.status != Game.STATUS_PUBLISHED:
@@ -167,7 +169,7 @@ class Game(models.Model):
             self.ending_at += timezone.timedelta(hours=24)
             self.save()
 
-            push_message = push.GameUpdatedPushMessage(payload=self)
+            push_message = push.GameExtendedPushMessage(payload=self)
 
             PushHelper.inform_all_devices(push_message)
 
@@ -205,7 +207,7 @@ class Game(models.Model):
         return tx
 
     def revoke(self):
-        if self.smart_contract_id in (None, '0'):
+        if not Web3.isAddress(self.smart_contract_id):
             raise AttributeError('Invalid smart contract address')
 
         if self.status != Game.STATUS_PUBLISHED:
@@ -228,8 +230,8 @@ class Game(models.Model):
         """
         :rtype: dict
         """
-        if self.smart_contract_id in (None, '0'):
-            raise AttributeError('Smart contract id can not be empty')
+        if not Web3.isAddress(self.smart_contract_id):
+            return []
 
         contract = self.get_smart_contract()
         winners, prizes = contract.call().getWinners()
@@ -277,13 +279,18 @@ class Game(models.Model):
         """
         :rtype: list
         """
+        result = []
 
-        if self.smart_contract_id in (None, '0'):
-            raise AttributeError('Smart contract id can not be empty')
+        if Web3.isAddress(self.smart_contract_id):
+            contract = self.get_smart_contract()
+            result = contract.call().calcaultePrizes()
+        else:
+            calculator = UnilotPrizeCalculator()
+            bet = Web3.toWei( ( ( self.prize_amount/self.num_players ) / 0.7 ), 'ether')
+            rawData = calculator.calculate_prizes(bet, self.num_players)
+            result = [ prize_amount for prize_amount in rawData if int(prize_amount) > 0 ]
 
-        contract = self.get_smart_contract()
-
-        return contract.call().calcaultePrizes()
+        return result
 
 
     def save(self, force_insert=False, force_update=False, using=None,
@@ -311,6 +318,21 @@ class Game(models.Model):
 
     def __str__(self):
         return '%d - %s' % (self.id, ( self.smart_contract_id if self.smart_contract_id else '%s in progress' % self.transaction_id ) )
+
+
+def wallet_validation(value):
+    if not Web3.isAddress(value):
+        raise ValidationError(_('Invalid wallet'))
+
+
+class GamePlayers(models.Model):
+    game = models.ForeignKey(Game, on_delete=models.deletion.CASCADE, related_name='game')
+    wallet = models.CharField(max_length=64, validators=[
+        wallet_validation
+    ])
+
+    def __str__(self):
+        return '%d:%s' % (self.game_id, self.wallet)
 
 
 class UserTelegram(models.Model):
@@ -341,6 +363,7 @@ class DeviceSettings(models.Model):
     dayly_game_notifications_enabled = models.BooleanField(default=True)
     weekly_game_notifications_enabled = models.BooleanField(default=True)
     bonus_game_notifications_enabled = models.BooleanField(default=True)
+    token_game_notifications_enabled = models.BooleanField(default=True)
     apns_device = models.OneToOneField(to=APNSDevice, on_delete=models.deletion.CASCADE,
                                     related_name='settings_apns_device', null=True)
     gcm_device = models.OneToOneField(to=GCMDevice, on_delete=models.deletion.CASCADE,

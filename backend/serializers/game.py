@@ -43,10 +43,10 @@ class PublicGameSerializer(serializers.ModelSerializer, FiatExchangeCalculatorMi
     """
 
     def get_gas_price(self, obj):
-        return 0 if obj.type in (Game.TYPE_30_DAYS, Game.TOKEN_GAME) else Web3.toWei(10, 'gwei')
+        return 0 if obj.type in (Game.TYPE_30_DAYS, Game.TOKEN_GAME) else 2
 
     def get_gas_limit(self, obj):
-        return 0 if obj.type in (Game.TYPE_30_DAYS, Game.TOKEN_GAME) else 120000
+        return 0 if obj.type in (Game.TYPE_30_DAYS, Game.TOKEN_GAME) else 90000
 
     prize_amount_fiat = serializers.SerializerMethodField(read_only=True)
     bet_amount = serializers.SerializerMethodField(read_only=True)
@@ -76,17 +76,12 @@ class PublicGameSerializer(serializers.ModelSerializer, FiatExchangeCalculatorMi
         return int(stat.get('numPlayers', getattr(obj, 'num_players')))
 
     def get_prize_amount(self, obj):
-        stat = self.__get_stat__(obj)
         result = 0
 
         try:
-            result = stat.get('prizeAmount')
+            stat = self.__get_stat__(obj)
+            result = Web3.fromWei(stat.get('prizeAmount'), 'ether')
         except:
-            pass
-
-        if result is not None and result > 0:
-            result = Web3.fromWei(result, 'ether')
-        else:
             result = float(getattr(obj, 'prize_amount'))
 
         return {
@@ -95,7 +90,12 @@ class PublicGameSerializer(serializers.ModelSerializer, FiatExchangeCalculatorMi
         }
 
     def get_prize_amount_fiat(self, obj):
-        return self.calculate_fiat_amount(self.get_prize_amount(obj).get('amount', 0))
+        amount = self.get_prize_amount(obj).get('amount', 0)
+
+        if obj.type == Game.TOKEN_GAME:
+            amount *= 0.000079
+
+        return self.calculate_fiat_amount(amount)
 
     def get_bet_amount_fiat(self, obj):
         return self.convert_amount_to_fiat(obj, attribute_name='bet_amount')
@@ -119,7 +119,12 @@ class GameWinner(serializers.Serializer, FiatExchangeCalculatorMixin):
     prize_amount_fiat = serializers.SerializerMethodField()
 
     def get_prize_amount_fiat(self, obj):
-        return self.convert_amount_to_fiat(obj.get('prize_amount', {'amount':0}), 'amount')
+        amount = obj.get('prize_amount', {'amount':0, 'currency': 'ETH'})
+
+        if amount.get('currency') == 'UNIT':
+            amount['amount'] = float(amount.get('amount')) * 0.000079
+
+        return self.convert_amount_to_fiat(amount, 'amount')
 
 
 class GameDebugPush(serializers.Serializer):

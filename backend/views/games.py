@@ -4,7 +4,7 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from web3.main import Web3
 
-from backend.models import Game
+from backend.models import Game, GamePlayers
 from backend.serializers.device import DeviceOS
 from backend.serializers.game import PublicGameSerializer, GameWinner, GameDebugPush
 from backend.utils.push import PushHelper
@@ -43,7 +43,7 @@ class GamePrizesView(generics.RetrieveAPIView):
                     'position': i,
                     'prize_amount': {
                         'amount': Web3.fromWei(prize, 'ether'),
-                        'currency': 'ETH'
+                        'currency': 'UNIT' if game.type in (Game.TOKEN_GAME,) else 'ETH'
                     }
                 })
 
@@ -58,7 +58,7 @@ class GamePrizesView(generics.RetrieveAPIView):
                     'position': i,
                     'prize_amount': {
                         'amount': prize,
-                        'currency': 'ETH'
+                        'currency': 'UNIT' if game.type in (Game.TOKEN_GAME,) else 'ETH'
                     }
                 })
 
@@ -118,5 +118,36 @@ class BonusGamePlayersListView(generics.RetrieveAPIView):
     def get(self, request, *args, **kwargs):
         game = self.get_object() #Throws 404 on none-existing game
 
+        players = GamePlayers.objects\
+            .values('wallet')\
+            .distinct('wallet')\
+            .exclude(game__type__in=(Game.TYPE_30_DAYS, Game.TOKEN_GAME,))\
+            .filter(game__started_at__gte=game.started_at, game__ending_at__lte=game.ending_at)
 
-        return Response([], status=status.HTTP_200_OK)
+        return Response(({'address': player.get('wallet')} for player in players), status=status.HTTP_200_OK)
+
+
+class CheckParticipation(generics.GenericAPIView):
+    permission_classes = (TokenHasScope,)
+    required_scopes = ('read',)
+
+    def get(self, request, *args, **kwargs):
+        players = GamePlayers.objects\
+            .distinct('game_id', 'wallet')\
+            .filter(wallet__in=request.GET.getlist(key='wallets'))\
+            .filter(game__status=Game.STATUS_PUBLISHED)
+
+        result = []
+        result_map = {}
+
+        for player in players:
+            if not player.wallet in result_map.keys():
+                result_map[player.wallet] = len(result)
+                result.append({
+                    'wallet': player.wallet,
+                    'games': [player.game_id]
+                })
+            else:
+                result[result_map[player.wallet]]['games'].append(player.game_id)
+
+        return Response(result, status=status.HTTP_200_OK)
