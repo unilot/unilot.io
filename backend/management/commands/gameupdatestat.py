@@ -25,7 +25,7 @@ class Command(BaseCommand):
                 games = Game.objects.filter(id=game_id)
             else:
                 games = Game.objects\
-                    .exclude(status__in=(Game.STATUS_PUBLISHED, Game.STATUS_FINISHING))\
+                    .exclude(status__in=(Game.STATUS_PUBLISHED, Game.STATUS_FINISHING, Game.STATUS_CANCELED))\
                     .exclude(player__is_winner=True)\
                     .distinct()
 

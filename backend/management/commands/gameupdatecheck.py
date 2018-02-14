@@ -87,12 +87,17 @@ class Command(BaseCommand):
 
                 if game.type != Game.TOKEN_GAME:
                     game.prize_amount = 0
-                game.num_players = GamePlayer.objects \
+
+                num_players_qs = GamePlayer.objects \
                     .values('wallet') \
                     .distinct('wallet') \
                     .exclude(game__type__in=(Game.TYPE_30_DAYS, Game.TOKEN_GAME,)) \
-                    .filter(game__started_at__gte=game.started_at, game__ending_at__lte=game.ending_at) \
-                    .count()
+                    .filter(game__started_at__gte=game.started_at, game__ending_at__lte=game.ending_at)
+
+                if game.type == Game.TOKEN_GAME:
+                    game.num_players = num_players_qs.count()
+                elif game.type == Game.TYPE_30_DAYS:
+                    game.num_players = num_players_qs.filter(is_winner=False).count()
 
                 for child_game in child_games:
                     if game.type != Game.TOKEN_GAME:
