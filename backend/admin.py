@@ -14,5 +14,5 @@ class FAQAdmin(TranslatableAdmin):
         django_models.TextField: {'widget': AdminMartorWidget}
     }
 
-admin.site.register((models.Game, models.GamePlayers, models.UserTelegram, models.ExchangeRate, models.DeviceSettings))
+admin.site.register((models.Game, models.GamePlayer, models.UserTelegram, models.ExchangeRate, models.DeviceSettings))
 admin.site.register(models.FAQ, FAQAdmin)

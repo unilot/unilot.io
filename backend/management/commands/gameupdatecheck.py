@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from web3.main import Web3
 
-from backend.models import Game, GamePlayers
+from backend.models import Game, GamePlayer
 from django.utils import timezone
 import logging
 
@@ -49,10 +49,10 @@ class Command(BaseCommand):
 
                 stat_num_players = stat.get('numPlayers', 0)
 
-                GamePlayers.objects.filter(id=game.id).delete()
+                GamePlayer.objects.filter(game_id=game.id).delete()
 
                 for player in players:
-                    GamePlayers.objects.create(game_id=game.id, wallet=player)
+                    GamePlayer.objects.create(game_id=game.id, wallet=player)
 
                 logger.info('Game %d: Checking num players')
                 logger.debug('Game %d: Game num players: %d Stat num players: %d' %
@@ -87,7 +87,7 @@ class Command(BaseCommand):
 
                 if game.type != Game.TOKEN_GAME:
                     game.prize_amount = 0
-                game.num_players = GamePlayers.objects \
+                game.num_players = GamePlayer.objects \
                     .values('wallet') \
                     .distinct('wallet') \
                     .exclude(game__type__in=(Game.TYPE_30_DAYS, Game.TOKEN_GAME,)) \
