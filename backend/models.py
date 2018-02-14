@@ -238,7 +238,7 @@ class Game(models.Model):
         result = {}
 
         #Setting address
-        for i, winner in enumerate([w_player.lower() for w_player in winners]):
+        for i, winner in enumerate([w_player for w_player in winners]):
             result[winner] = Web3.fromWei(prizes[i], 'ether')
 
         return OrderedDict(reversed(sorted(result.items(), key=lambda t: t[1])))
@@ -326,10 +326,12 @@ def wallet_validation(value):
 
 
 class GamePlayer(models.Model):
-    game = models.ForeignKey(Game, on_delete=models.deletion.CASCADE, related_name='game')
+    game = models.ForeignKey(Game, on_delete=models.deletion.CASCADE, related_name='player')
     wallet = models.CharField(max_length=64, validators=[
         wallet_validation
     ])
+    is_winner = models.BooleanField(default=False, null=False, blank=False)
+    prize_amount = models.FloatField(default=0, null=False, blank=False)
 
     def __str__(self):
         return '%d:%s' % (self.game_id, self.wallet)
