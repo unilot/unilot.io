@@ -91,10 +91,12 @@ class Command(BaseCommand):
                 num_players_qs = GamePlayer.objects \
                     .distinct('wallet') \
                     .exclude(game__type__in=(Game.TYPE_30_DAYS, Game.TOKEN_GAME,)) \
+                    .exclude(game__status=Game.STATUS_CANCELED) \
                     .filter(game__started_at__gte=game.started_at, game__ending_at__lte=game.ending_at)
 
                 if game.type == Game.TYPE_30_DAYS:
-                    num_players_qs = num_players_qs.filter(is_winner=False)
+                    num_players_qs = num_players_qs.filter(is_winner=False)\
+                                                .filter(game__status=Game.STATUS_FINISHED)
 
                 game.num_players = num_players_qs.count()
 
