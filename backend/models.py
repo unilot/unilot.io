@@ -325,7 +325,7 @@ def wallet_validation(value):
         raise ValidationError(_('Invalid wallet'))
 
 
-class GamePlayers(models.Model):
+class GamePlayer(models.Model):
     game = models.ForeignKey(Game, on_delete=models.deletion.CASCADE, related_name='game')
     wallet = models.CharField(max_length=64, validators=[
         wallet_validation
@@ -333,6 +333,9 @@ class GamePlayers(models.Model):
 
     def __str__(self):
         return '%d:%s' % (self.game_id, self.wallet)
+
+    class Meta:
+        unique_together = ('game', 'wallet',)
 
 
 class UserTelegram(models.Model):
