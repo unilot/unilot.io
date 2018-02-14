@@ -87,16 +87,28 @@ class Command(BaseCommand):
 
                 if game.type != Game.TOKEN_GAME:
                     game.prize_amount = 0
-                game.num_players = GamePlayer.objects \
-                    .values('wallet') \
+
+                num_players_qs = GamePlayer.objects \
                     .distinct('wallet') \
                     .exclude(game__type__in=(Game.TYPE_30_DAYS, Game.TOKEN_GAME,)) \
-                    .filter(game__started_at__gte=game.started_at, game__ending_at__lte=game.ending_at) \
-                    .count()
+                    .exclude(game__status=Game.STATUS_CANCELED) \
+                    .filter(game__started_at__gte=game.started_at, game__ending_at__lte=game.ending_at)
+
+                if game.type == Game.TYPE_30_DAYS:
+                    num_players_qs = num_players_qs.filter(is_winner=False)\
+                                                .filter(game__status=Game.STATUS_FINISHED)
+
+                game.num_players = num_players_qs.count()
+
+                GamePlayer.objects.filter(game_id=game.id).delete()
+
+                for player in num_players_qs:
+                    GamePlayer.objects.create(game_id=game.id, wallet=player.wallet, is_winner=False,
+                                              prize_amount=0)
 
                 for child_game in child_games:
                     if game.type != Game.TOKEN_GAME:
-                        game.prize_amount += ( (child_game.prize_amount / 0.7) * 0.1 )
+                        game.prize_amount += ( (child_game.prize_amount / 0.8) * 0.1 )
 
                 game.save()
 
