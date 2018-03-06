@@ -53,6 +53,8 @@ class Game(models.Model):
     }
 
     CONTRACT_NAME='UnilotTailEther'
+    BONUS_CONTRACT_NAME = 'UnilotBonusEtherToken'
+    TOKEN_CONTRACT_NAME = 'UnilotBonusTailToken'
 
     type = models.IntegerField(choices=TYPE_LIST, null=False)
     status = models.IntegerField(choices=STATUS_LIST, null=False, default=STATUS_NEW)
@@ -80,9 +82,16 @@ class Game(models.Model):
         :rtype: Contract
         """
 
+        contract_name = self.CONTRACT_NAME
+
+        if self.type == Game.TYPE_30_DAYS:
+            contract_name = self.BONUS_CONTRACT_NAME
+        elif self.type == Game.TOKEN_GAME:
+            contract_name = self.TOKEN_CONTRACT_NAME
+
         web3 = self.get_web3()
-        contract = web3.eth.contract(contract_name=self.CONTRACT_NAME,
-                                     abi=ContractHelper.get_abi(self.CONTRACT_NAME),
+        contract = web3.eth.contract(contract_name=contract_name,
+                                     abi=ContractHelper.get_abi(contract_name),
                                      address=self.smart_contract_id)
 
         return contract
@@ -120,9 +129,16 @@ class Game(models.Model):
     def build_contract(self):
         web3 = self.get_web3()
 
-        contract = web3.eth.contract(abi=ContractHelper.get_abi(self.CONTRACT_NAME),
-                                     bytecode=ContractHelper.get_bytecode(self.CONTRACT_NAME),
-                                     contract_name=self.CONTRACT_NAME)
+        contract_name = self.CONTRACT_NAME
+
+        if self.type == Game.TYPE_30_DAYS:
+            contract_name = self.BONUS_CONTRACT_NAME
+        elif self.type == Game.TOKEN_GAME:
+            contract_name = self.TOKEN_CONTRACT_NAME
+
+        contract = web3.eth.contract(abi=ContractHelper.get_abi(contract_name),
+                                     bytecode=ContractHelper.get_bytecode(contract_name),
+                                     contract_name=contract_name)
         """
         :rtype contract: Contract
         """

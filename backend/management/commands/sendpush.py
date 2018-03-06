@@ -31,6 +31,10 @@ class Command(BaseCommand):
                 push_message = push.GameStartedPushMessage(payload=game)
             elif push_type == 'game_updated':
                 push_message = push.GameNewPlayerPushMessage(payload=game)
+            elif push_type == 'game_finishing':
+                push_message = push.GameUnpublishedPushMessage(payload=game)
+            elif push_type == 'game_finished':
+                push_message = push.GameFinishedPushMessage(payload=game)
 
             if push_message:
                 if device_token and GCMDevice.objects.filter(registration_id=device_token).exists():
