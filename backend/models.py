@@ -53,7 +53,7 @@ class Game(models.Model):
     }
 
     CONTRACT_NAME='UnilotTailEther'
-    BONUS_CONTRACT_NAME = 'UnilotBonusEtherToken'
+    BONUS_CONTRACT_NAME = 'UnilotBonusTailEther'
     TOKEN_CONTRACT_NAME = 'UnilotBonusTailToken'
 
     type = models.IntegerField(choices=TYPE_LIST, null=False)
