@@ -249,9 +249,20 @@ class Game(models.Model):
         if not Web3.isAddress(self.smart_contract_id):
             return []
 
-        contract = self.get_smart_contract()
-        winners, prizes = contract.call().getWinners()
         result = {}
+
+        try:
+            contract = self.get_smart_contract()
+            winners, prizes = contract.call().getWinners()
+        except Exception:
+            players = GamePlayer.objects.filter(game=self, is_winner=True)
+
+            winners = []
+            prizes = []
+
+            for player in players:
+                winners.append(player.wallet)
+                prizes.append(player.prize_amount)
 
         #Setting address
         for i, winner in enumerate([w_player for w_player in winners]):
