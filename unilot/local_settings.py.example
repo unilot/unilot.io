@@ -102,3 +102,5 @@ DJANGO_TELEGRAMBOT = {
 
 MAILCHIMP_API_KEY = 'mailchimp-api-key'
 MAILCHIMP_LOGIN = 'mailchimp-login'
+
+CORS_ORIGIN_ALLOW_ALL=False
