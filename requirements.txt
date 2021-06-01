@@ -54,5 +54,5 @@ simplejson==3.11.1
 six==1.10.0
 toolz==0.8.2
 uritemplate==3.0.0
-urllib3==1.22
+urllib3==1.26.5
 web3==3.16.2
